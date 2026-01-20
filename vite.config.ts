@@ -4,13 +4,15 @@ import UnoCSS from 'unocss/vite'
 import {defineConfig} from 'vite'
 import {viteSingleFile} from 'vite-plugin-singlefile'
 import vuetify from 'vite-plugin-vuetify'
+import presetWind4 from 'unocss/preset-wind4'
 
 export default defineConfig({
+    // base: `/__APP_URL__/`,
     plugins: [
         vue(),
-        UnoCSS(),
+        UnoCSS({presets: [presetWind4()]}),
         vuetify(),
-        Icons(),
+        Icons({autoInstall: true,}),
         viteSingleFile({removeViteModuleLoader: true,}),
     ],
 })
