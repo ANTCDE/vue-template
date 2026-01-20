@@ -1,6 +1,11 @@
 import { Icon } from '@iconify/vue'
 import { createVuetify } from 'vuetify'
-import '@mdi/font/css/materialdesignicons.css'
+
+/* Might need to remove this if we're having issues in production
+https://unocss.dev/integrations/vite#edit-classes-in-devtools
+ */
+// UnoCSS
+import 'virtual:uno.css'
 import 'vuetify/styles'
 
 export const vuetify = createVuetify({
@@ -63,3 +68,5 @@ export const vuetify = createVuetify({
     },
   },
 })
+
+export default vuetify

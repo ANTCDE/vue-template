@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "vuetify": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@vuetify/mcp"
+      ]
+    },
+    "vue": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/vuejs/core"
+      ]
+    },
+    "vite": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/vitejs/vite"
+      ]
+    }
+  }
+}

@@ -1,3 +1,5 @@
 {
+  "version": "0.8.0",
+  "tagline": "Template for getting started with an ANT OS app.",
   "tables": []
 }
