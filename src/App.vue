@@ -6,7 +6,8 @@ import {useTheme} from "vuetify";
 import {objectPick} from "@vueuse/core";
 import qs from "qs";
 
-const {comms, colorMode} = injectContext()
+const {comms, colorMode, i18n} = injectContext()
+const {t} = i18n
 const {toolbar, notepad, context, connect, notifications, appState, signal} = comms// simple utility for communicating with the OS through your application. Just copy this line into the desired component
 const count = ref(0)
 const sbs = ref<SbsRecord[]>([])
@@ -39,14 +40,14 @@ watch(() => context.value.license, async (license) => {
   }
 })
 
-watch(count, count => toolbar.title.value = `Count: ${count}`)
+watch(count, count => toolbar.title.value = t('toolbar.count', {count}))
 
 onMounted(() => {
-  toolbar.title.value = `Test App!` // Setting the toolbar title will override the default value
+  toolbar.title.value = t('app.toolbarTitle') // Setting the toolbar title will override the default value
   toolbar.menu.value = ['mdi-home-outline', 'mdi-cog-outline'].map((icon, index) => ({ // You can set and update menu items any time, including their click listeners.
     icon,
-    title: `Item ${index + 1}`,
-    onClick: () => comms.notifications.info(`Item ${index + 1} clicked`),
+    title: t('toolbar.menuItem', {index: index + 1}),
+    onClick: () => comms.notifications.info(t('notifications.itemClicked', {index: index + 1})),
   }))
 
   toolbar.searchEnabled.value = true // setting this to `true` will show a prompt in the OS's toolbar
@@ -63,30 +64,33 @@ onMounted(() => unsubscribeSignal = signal.receive((s) => {
 onUnmounted(() => unsubscribeSignal?.())
 
 const navigation = [
-  {title: 'Dashboard', subtitle: 'OS.dash'},
-  {title: 'Login', subtitle: 'OS.login'},
-  {title: 'Profile', subtitle: 'OS.profile'},
-  {title: 'ANT OS Store', subtitle: 'store'},
+  {title: t('navigation.dashboard'), subtitle: 'OS.dash'},
+  {title: t('navigation.login'), subtitle: 'OS.login'},
+  {title: t('navigation.profile'), subtitle: 'OS.profile'},
+  {title: t('navigation.store'), subtitle: 'store'},
 ]
 </script>
 
 <template>
   <v-app class="pa-8">
-    <h3>Test app!</h3>
-    <p>Run your app and go to <a href="os.antcde.io/developer">ANT OS developer page</a>. By default it shows the app
-      hosted on port 5174, but you can change it by going to /developer/:port.</p>
+    <h3>{{ t('app.title') }}</h3>
+    <i18n-t keypath="app.description" tag="p">
+      <template #link>
+        <a href="os.antcde.io/developer">{{ t('app.developerPage') }}</a>
+      </template>
+    </i18n-t>
     <v-btn-group divided variant="outlined">
-      <v-btn @click="notifications.success('This is amazing!')" text="Send notification"/>
-      <v-btn type="button" @click="count++">count is {{ count }}</v-btn>
+      <v-btn @click="notifications.success(t('notifications.amazing'))" :text="t('actions.sendNotification')"/>
+      <v-btn type="button" @click="count++">{{ t('actions.countIs', {count}) }}</v-btn>
     </v-btn-group>
 
-    <h4>query params</h4>
-    <p>Change the query params in the URL to receive them in the app</p>
+    <h4>{{ t('sections.queryParams.title') }}</h4>
+    <p>{{ t('sections.queryParams.description') }}</p>
     <code>{{ query }}</code>
 
     <v-form>
-      <h4>Select SBS</h4>
-      <p>Select an SBS item to be shown and highlighted in the notepad</p>
+      <h4>{{ t('sections.selectSbs.title') }}</h4>
+      <p>{{ t('sections.selectSbs.description') }}</p>
       <v-select
           density="compact"
           :items="sbs"
@@ -94,8 +98,8 @@ const navigation = [
           @update:model-value="code => notepad.show('sbs').then(() => notepad.selectSbs({ code }))"
       />
 
-      <h4>Select Task</h4>
-      <p>Select a task to be shown in the notepad</p>
+      <h4>{{ t('sections.selectTask.title') }}</h4>
+      <p>{{ t('sections.selectTask.description') }}</p>
       <v-select
           density="compact"
           :items="tasks"
@@ -103,8 +107,8 @@ const navigation = [
           @update:model-value="id => notepad.showTask({ id })"
       />
 
-      <h4>Notepad</h4>
-      <p>Open a certain tab in the notepad</p>
+      <h4>{{ t('sections.notepad.title') }}</h4>
+      <p>{{ t('sections.notepad.description') }}</p>
       <v-select
           density="compact"
           clearable
@@ -113,8 +117,8 @@ const navigation = [
           @click:clear="notepad.hide"
       />
 
-      <h4>Overlay</h4>
-      <p>Show the task as a workflow</p>
+      <h4>{{ t('sections.overlay.title') }}</h4>
+      <p>{{ t('sections.overlay.description') }}</p>
       <v-select
           density="compact"
           :items="tasks"
@@ -122,8 +126,8 @@ const navigation = [
           @update:model-value="(id) => signal({overlay: {action: {id}}})"
       />
 
-      <h4>Navigate to</h4>
-      <p>Open a specific page or other app through an app</p>
+      <h4>{{ t('sections.navigateTo.title') }}</h4>
+      <p>{{ t('sections.navigateTo.description') }}</p>
       <v-select
           density="compact"
           :items="navigation"
