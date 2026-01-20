@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "Test app!",
+    "toolbarTitle": "Test App!",
+    "description": "Run your app and go to {link}. By default it shows the app hosted on port 5174, but you can change it by going to /developer/:port.",
+    "developerPage": "ANT OS developer page"
+  },
+  "actions": {
+    "sendNotification": "Send notification",
+    "countIs": "count is {count}"
+  },
+  "notifications": {
+    "amazing": "This is amazing!",
+    "itemClicked": "Item {index} clicked"
+  },
+  "toolbar": {
+    "count": "Count: {count}",
+    "menuItem": "Item {index}"
+  },
+  "sections": {
+    "queryParams": {
+      "title": "query params",
+      "description": "Change the query params in the URL to receive them in the app"
+    },
+    "selectSbs": {
+      "title": "Select SBS",
+      "description": "Select an SBS item to be shown and highlighted in the notepad"
+    },
+    "selectTask": {
+      "title": "Select Task",
+      "description": "Select a task to be shown in the notepad"
+    },
+    "notepad": {
+      "title": "Notepad",
+      "description": "Open a certain tab in the notepad"
+    },
+    "overlay": {
+      "title": "Overlay",
+      "description": "Show the task as a workflow"
+    },
+    "navigateTo": {
+      "title": "Navigate to",
+      "description": "Open a specific page or other app through an app"
+    }
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "profile": "Profile",
+    "store": "ANT OS Store"
+  }
+}

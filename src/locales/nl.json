@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "Test app!",
+    "toolbarTitle": "Test App!",
+    "description": "Start je app en ga naar {link}. Standaard wordt de app getoond op poort 5174, maar je kunt dit wijzigen via /developer/:port.",
+    "developerPage": "ANT OS ontwikkelaarspagina"
+  },
+  "actions": {
+    "sendNotification": "Verstuur notificatie",
+    "countIs": "teller is {count}"
+  },
+  "notifications": {
+    "amazing": "Dit is geweldig!",
+    "itemClicked": "Item {index} aangeklikt"
+  },
+  "toolbar": {
+    "count": "Teller: {count}",
+    "menuItem": "Item {index}"
+  },
+  "sections": {
+    "queryParams": {
+      "title": "query parameters",
+      "description": "Wijzig de query parameters in de URL om ze in de app te ontvangen"
+    },
+    "selectSbs": {
+      "title": "Selecteer SBS",
+      "description": "Selecteer een SBS-item om te tonen en te markeren in het notitieblok"
+    },
+    "selectTask": {
+      "title": "Selecteer Taak",
+      "description": "Selecteer een taak om te tonen in het notitieblok"
+    },
+    "notepad": {
+      "title": "Notitieblok",
+      "description": "Open een bepaald tabblad in het notitieblok"
+    },
+    "overlay": {
+      "title": "Overlay",
+      "description": "Toon de taak als een workflow"
+    },
+    "navigateTo": {
+      "title": "Navigeer naar",
+      "description": "Open een specifieke pagina of andere app via een app"
+    }
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "login": "Inloggen",
+    "profile": "Profiel",
+    "store": "ANT OS Winkel"
+  }
+}

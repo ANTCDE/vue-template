@@ -68,5 +68,3 @@ export const vuetify = createVuetify({
     },
   },
 })
-
-export default vuetify
