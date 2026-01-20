@@ -11,7 +11,7 @@ An app is essentially a single-page website. By using ANT's component library, y
 
 Check out [main.ts](./src/main.ts) to see a utility that provides a comms instance and [App.vue](./src/App.vue:7) to see it used in action.
 
-![demo](./demo_480.gif)
+![demo](./public/assets/demo_480.gif)
 
 - Through `comms.context` you can [watch and receive](./src/App.vue:36) important changes from the OS, like changes in Project, License and/or User. 
 - The `comms.connect` property is the API that enables the ANT system. You can use it as well as the OS itself.

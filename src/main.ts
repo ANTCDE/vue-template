@@ -5,7 +5,7 @@ import { vuetify } from './plugins/vuetify.ts'
 import { provideContext } from './plugins/context.ts'
 
 createApp(App)
-    .use(provideContext)
     .use(vuetify)
     .use(AntComponentLibrary)
+    .use(provideContext)
     .mount('#app-1')

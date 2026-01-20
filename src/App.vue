@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type {NotepadVisibility, SbsRecord} from '@antcde/connect-ts'
 import {onMounted, onUnmounted, ref, watch} from 'vue'
-import {objectPick} from '@vueuse/core/index.cjs';
-import * as qs from 'qs'
 import {injectContext} from "./plugins/context.ts";
 import {useTheme} from "vuetify";
+import {objectPick} from "@vueuse/core";
+import qs from "qs";
 
 const {comms, colorMode} = injectContext()
 const {toolbar, notepad, context, connect, notifications, appState, signal} = comms// simple utility for communicating with the OS through your application. Just copy this line into the desired component
@@ -18,7 +18,7 @@ const theme = useTheme();
 
 watch(
     colorMode.isDark,
-    isDark => theme.global.name.value = isDark ? 'dark' : 'light',
+    isDark => theme.change(isDark ? 'dark' : 'light'),
     {immediate: true}
 )
 
@@ -79,10 +79,6 @@ const navigation = [
       <v-btn @click="notifications.success('This is amazing!')" text="Send notification"/>
       <v-btn type="button" @click="count++">count is {{ count }}</v-btn>
     </v-btn-group>
-
-    <h4>Search</h4>
-    <p>Type in the toolbar to receive the search input</p>
-    <code>{{ toolbar.search }}</code>
 
     <h4>query params</h4>
     <p>Change the query params in the URL to receive them in the app</p>
