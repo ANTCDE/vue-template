@@ -4,7 +4,6 @@ import {dirname, resolve} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import Icons from 'unplugin-icons/vite'
 import UnoCSS from 'unocss/vite'
-import presetWind4 from 'unocss/preset-wind4'
 import {defineConfig} from 'vite'
 import {viteSingleFile} from 'vite-plugin-singlefile'
 import vuetify from 'vite-plugin-vuetify'
@@ -16,7 +15,7 @@ export default defineConfig({
         VueI18nPlugin({
             include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
         }),
-        UnoCSS({presets: [presetWind4()]}),
+        UnoCSS(),
         vuetify(),
         Icons({autoInstall: true,}),
         viteSingleFile({removeViteModuleLoader: true,}),
