@@ -3,12 +3,10 @@ import type {NotepadVisibility, SbsRecord} from '@antcde/connect-ts'
 import {onMounted, onUnmounted, ref, watch} from 'vue'
 import {objectPick} from '@vueuse/core/index.cjs';
 import * as qs from 'qs'
-import {injectContext} from "./main.ts";
+import {injectContext} from "./plugins/context.ts";
 import {useTheme} from "vuetify";
-import {useAntColorMode} from "@antcde/vue-utils";
 
-const {comms} = injectContext()
-const colorMode = useAntColorMode(comms)
+const {comms, colorMode} = injectContext()
 const {toolbar, notepad, context, connect, notifications, appState, signal} = comms// simple utility for communicating with the OS through your application. Just copy this line into the desired component
 const count = ref(0)
 const sbs = ref<SbsRecord[]>([])

@@ -9,8 +9,6 @@ export default defineConfig({
         vue(),
         vuetify(),
         Icons(),
-        viteSingleFile({
-            removeViteModuleLoader: true,
-        }),
+        viteSingleFile({removeViteModuleLoader: true,}),
     ],
 })
