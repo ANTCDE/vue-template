@@ -5,11 +5,10 @@ import {fileURLToPath} from 'node:url'
 import Icons from 'unplugin-icons/vite'
 import UnoCSS from 'unocss/vite'
 import {defineConfig} from 'vite'
-import {viteSingleFile} from 'vite-plugin-singlefile'
 import vuetify from 'vite-plugin-vuetify'
 
 export default defineConfig({
-    // base: `/__APP_URL__/`,
+    base: `/__APP_URL__/`,
     plugins: [
         vue(),
         VueI18nPlugin({
@@ -18,6 +17,5 @@ export default defineConfig({
         UnoCSS(),
         vuetify(),
         Icons({autoInstall: true,}),
-        viteSingleFile({removeViteModuleLoader: true,}),
     ],
 })
