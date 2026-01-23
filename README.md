@@ -1,9 +1,4 @@
-# ⚠️ MOOOOOVED 🐄
-
-Up-to-date version can be found [here](https://github.com/ANTCDE/vue-template).
-
-# ANT-OS app template
-###### For Vue ✨
+## Template for Vue ✨
 
 This example shows how you can create and publish your own app for ANT-OS.
 
