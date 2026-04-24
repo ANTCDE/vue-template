@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "Test-App!",
+    "toolbarTitle": "Test-App!",
+    "description": "Starte deine App und gehe zu {link}. Standardmäßig wird die App auf Port 5174 angezeigt, aber du kannst dies über /developer/:port ändern.",
+    "developerPage": "ANT OS Entwicklerseite"
+  },
+  "actions": {
+    "sendNotification": "Benachrichtigung senden",
+    "countIs": "Zähler ist {count}"
+  },
+  "notifications": {
+    "amazing": "Das ist fantastisch!",
+    "itemClicked": "Element {index} angeklickt"
+  },
+  "toolbar": {
+    "count": "Zähler: {count}",
+    "menuItem": "Element {index}"
+  },
+  "sections": {
+    "queryParams": {
+      "title": "Query-Parameter",
+      "description": "Ändere die Query-Parameter in der URL, um sie in der App zu empfangen"
+    },
+    "selectSbs": {
+      "title": "SBS auswählen",
+      "description": "Wähle ein SBS-Element aus, um es im Notizblock anzuzeigen und hervorzuheben"
+    },
+    "selectTask": {
+      "title": "Aufgabe auswählen",
+      "description": "Wähle eine Aufgabe aus, um sie im Notizblock anzuzeigen"
+    },
+    "notepad": {
+      "title": "Notizblock",
+      "description": "Öffne einen bestimmten Tab im Notizblock"
+    },
+    "overlay": {
+      "title": "Overlay",
+      "description": "Zeige die Aufgabe als Workflow an"
+    },
+    "navigateTo": {
+      "title": "Navigieren zu",
+      "description": "Öffne eine bestimmte Seite oder andere App über eine App"
+    }
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "login": "Anmelden",
+    "profile": "Profil",
+    "store": "ANT OS Store"
+  }
+}

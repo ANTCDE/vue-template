@@ -1,0 +1,40 @@
+{
+  "name": "ant-app-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5174",
+    "build": "pnpm clear && vite build && pnpm copy-config && pnpm zip",
+    "copy-config": "pnpm dlx shx cp app-config.json ./dist/app-config.json",
+    "zip": "cd ./dist && pnpm dlx bestzip app.zip *",
+    "clear": "pnpm dlx shx rm -rf dist",
+    "recreate": "pnpm dlx rimraf --glob **/node_modules && pnpm dlx rimraf ./pnpm-lock.yaml && pnpm i"
+  },
+  "dependencies": {
+    "@antcde/component-library": "^0.1.14",
+    "@antcde/connect-ts": "^0.4.16",
+    "@antcde/vue-utils": "^0.2.11",
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify/vue": "^5.0.0",
+    "@vueuse/core": "^14.2.1",
+    "vue": "^3.5.29",
+    "vue-i18n": "^11.4.0",
+    "vuetify": "^4.0.6"
+  },
+  "devDependencies": {
+    "@intlify/unplugin-vue-i18n": "^11.1.2",
+    "@types/node": "^25.6.0",
+    "@unocss/preset-rem-to-px": "^66.6.0",
+    "@unocss/preset-wind4": "^66.6.0",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "typescript": "~6.0.3",
+    "unocss": "^66.6.0",
+    "unplugin-auto-import": "^19.3.0",
+    "unplugin-icons": "^23.0.1",
+    "unplugin-vue-components": "^32.0.2",
+    "vite": "^8.0.10",
+    "vite-plugin-vuetify": "^2.1.3",
+    "vue-tsc": "^3.2.7"
+  }
+}
