@@ -9,7 +9,9 @@
     "copy-config": "pnpm dlx shx cp app-config.json ./dist/app-config.json",
     "zip": "cd ./dist && pnpm dlx bestzip app.zip *",
     "clear": "pnpm dlx shx rm -rf dist",
-    "recreate": "pnpm dlx rimraf --glob **/node_modules && pnpm dlx rimraf ./pnpm-lock.yaml && pnpm i"
+    "recreate": "pnpm dlx rimraf --glob **/node_modules && pnpm dlx rimraf ./pnpm-lock.yaml && pnpm i",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@antcde/component-library": "^0.1.14",
@@ -35,6 +37,9 @@
     "unplugin-vue-components": "^32.0.0",
     "vite": "^8.0.10",
     "vite-plugin-vuetify": "^2.1.3",
+    "@vue/test-utils": "^2.4.9",
+    "happy-dom": "^20.9.0",
+    "vitest": "^4.1.5",
     "vue-tsc": "^3.2.7"
   }
 }
