@@ -1,3 +1,3 @@
 import { createAntVitestConfig } from '@antcde/component-library/test/vitest'
 
-export default createAntVitestConfig(import.meta.url, {}, { iframeApp: true })
+export default createAntVitestConfig(import.meta.url)
