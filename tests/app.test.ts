@@ -1,13 +1,7 @@
 import { createMockAppContext, testAppSetup } from '@antcde/component-library/test'
-import { vi } from 'vitest'
-import { provideContext } from '@/plugins/context'
 import App from '@/App.vue'
+import { provideContext } from '@/plugins/context'
 
-const mockContext = createMockAppContext({
-  connect: {
-    sbs: { getSbs: vi.fn().mockResolvedValue([]) },
-    tasks: { getV2Tasks: vi.fn().mockResolvedValue({ data: [] }) },
-  },
-})
-
-testAppSetup(App, mockContext, { provideContext })
+// connect is auto-stubbed by createMockAppContext — only pass a `connect`
+// override for services whose return value a specific test asserts on.
+testAppSetup(App, createMockAppContext(), { provideContext })
