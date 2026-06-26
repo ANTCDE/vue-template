@@ -16,13 +16,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import en from '@/lang/translations/en.json'
 import Main from '@/components/Main.vue'
 
-const mockContext = createMockAppContext({
-  connect: {
-    sbs: { getSbs: vi.fn().mockResolvedValue([]) },
-    tasks: { getV2Tasks: vi.fn().mockResolvedValue({ data: [] }) },
-  },
-  messages: en,
-})
+// connect is auto-stubbed by createMockAppContext — only `messages` is needed
+// here, because these tests assert on translated strings.
+const mockContext = createMockAppContext({ messages: en })
 
 vi.mock('@/plugins/context', () => ({
   injectContext: () => mockContext,
