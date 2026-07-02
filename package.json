@@ -13,14 +13,13 @@
     "zip": "cd ./dist && pnpm dlx bestzip app.zip *",
     "clear": "pnpm dlx shx rm -rf dist",
     "preview": "vite preview",
-    "recreate": "pnpm dlx rimraf --glob **/node_modules && pnpm dlx rimraf ./pnpm-lock.yaml && pnpm i",
     "lint": "eslint .",
     "type-check": "vue-tsc --build",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@antcde/component-library": "^0.1.16",
+    "@antcde/component-library": "^0.1.17",
     "@antcde/connect-ts": "^0.4.19",
     "@antcde/vue-utils": "^0.2.14",
     "@vueuse/core": "^14.3.0",
@@ -47,7 +46,7 @@
     "unplugin-auto-import": "^21.0.0",
     "unplugin-icons": "^23.0.1",
     "unplugin-vue-components": "^32.1.0",
-    "vite": "^8.1.2",
+    "vite": "^8.1.3",
     "vite-plugin-vuetify": "^2.1.3",
     "vitest": "^4.1.9",
     "vue-tsc": "^3.3.6"
