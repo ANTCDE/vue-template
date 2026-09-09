@@ -1,45 +1,41 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
+# Dependabot configuration for the ANT Vue app template.
+#
+# This file previously described a PHP/Composer project — it declared a
+# `composer` ecosystem (there is no composer.json here), targeted a `develop`
+# branch that does not exist in this repo, and grouped on `laravel/*` patterns.
+# Net effect: Dependabot never opened an npm pull request for this template, so
+# a starter that is supposed to ship current tooling silently went stale.
 version: 2
 updates:
-  # PHP/Composer dependencies
-  - package-ecosystem: "composer"
+  # npm dependencies. Unlike the ant-os monorepo — where version updates are
+  # owned by .github/workflows/update-dependencies.yml — this repo has no
+  # update workflow, so Dependabot owns them here.
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "wednesday"
-    target-branch: "develop"
+    # No `target-branch`. `main` is already the default branch, and setting the
+    # key would make Dependabot ignore this entry's config for SECURITY updates,
+    # killing the grouping below.
     open-pull-requests-limit: 5
     commit-message:
       prefix: "chore(deps)"
     labels:
       - "dependencies"
-    ignore:
-      # Skip all major updates - handle manually when ready
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
     groups:
-      laravel:
+      # Minor/patch land grouped, and dependabot-auto-merge.yml merges them.
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+      security-updates:
+        applies-to: security-updates
         patterns:
-          - "laravel/*"
-          - "illuminate/*"
-        update-types:
-          - "minor"
-          - "patch"
-      minor-updates:
-        update-types:
-          - "minor"
-          - "patch"
-        exclude-patterns:
-          - "laravel/*"
-      dev-dependencies:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-          - "patch"
+          - "*"
+    # Majors are deliberately left ungrouped so each one opens its own
+    # reviewable PR. They are NOT ignored: a template pinned to a stale major
+    # is the problem this file is fixing.
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
