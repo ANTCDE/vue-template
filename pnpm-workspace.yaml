@@ -1,0 +1,6 @@
+# pnpm 11 refuses to install until each dependency with a build script is
+# explicitly allowed or denied. Values mirror the ant-os monorepo.
+allowBuilds:
+  '@vaadin/vaadin-usage-statistics': true
+  esbuild: true
+  vue-demi: true
