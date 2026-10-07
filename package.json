@@ -19,9 +19,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@antcde/component-library": "^0.1.17",
-    "@antcde/connect-ts": "^0.4.19",
-    "@antcde/vue-utils": "^0.2.14",
+    "@antcde/component-library": "^0.1.30",
+    "@antcde/connect-ts": "^0.4.32",
+    "@antcde/vue-utils": "^0.2.27",
     "@vueuse/core": "^14.3.0",
     "@vueuse/math": "^15.0.0",
     "vue": "^3.5.39",
