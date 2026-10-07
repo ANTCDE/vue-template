@@ -140,7 +140,7 @@ Different endpoints paginate differently. Check the return type.
 
 | Style | Used by | Request | Response |
 | --- | --- | --- | --- |
-| Paginator | most list endpoints (projects, triggers, DMS lists…) | `page`, `per_page` | `data[]` plus `meta`/`links` (with `total` and `last_page` where available) |
+| Paginator | most list endpoints (projects, triggers, DMS lists…) | `page`, `per_page` | `data[]` plus paging info. Some include `total`/`last_page`; others (DMS lists) only `current_page`/`per_page` plus `links`, so use `links.next` to see if there's more. Check the return type |
 | Task list | `tasks.getV2Tasks` | `per_page` and `page` in the query string (`buildTaskQuery`) | `{ data, links, meta }`. **Without `per_page` you get everything**, so always set it |
 | Table query | `tables.queryTables` | `limit`, `offset` per table in the query | `result[alias].records`, total in `result[alias].stats.count` |
 

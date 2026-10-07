@@ -33,8 +33,10 @@
 - Treat checks in the UI as UX only. The API enforces every permission, so the only purpose of
   gating is that users never see a button that will fail.
 - Hide or disable write actions when `projectReadOnly` is true, before the user meets a refusal.
-- For table and file actions, use the resource's own `permissions`, combined with
-  `isProjectAdmin`. The template's Tables example shows how.
+- For **table** actions, use the table's `permissions` combined with `isProjectAdmin` (the
+  template's Tables example shows how).
+- For **file** actions, use each file's own `permissions` as they are. The server already computed
+  them, admin rights included. For a folder, rename and move depend on its parent's permissions.
 - Fail closed. With no license or project selected, `usePermissions` returns `false`, and your UI
   should treat that as "not allowed".
 

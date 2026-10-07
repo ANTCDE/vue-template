@@ -62,12 +62,16 @@ unsubscribe function. Always call it.
 | --- | --- |
 | `route` | The OS route changed |
 | `connection: { state, since }` | The realtime connection changed (`connected` / `connecting` / `unavailable`). Also sent once when you subscribe |
-| `importProgress` | Progress of an asynchronous record import |
-| `jobProgress` | Progress of a long-running background job (has a `job_type`) |
+| `importProgress` | Progress of an asynchronous record import (pushed automatically) |
+| `jobProgress` | Progress of a long-running background job, with a `job_type` (pushed automatically) |
 | `limitChange` | A license limit changed (from a subscribed limits channel) |
-| `dmsFile`, `dmsFileBatch` | Documents changed. See [capabilities/files-dms.md](capabilities/files-dms.md) |
+| `dmsFile`, `dmsFileBatch` | Documents changed, by anyone (pushed automatically). See [capabilities/files-dms.md](capabilities/files-dms.md) |
 | `topic` | A message on a topic. See below |
 | change keys (`task`, `project`, …) and `resource` | Another app or the server changed a resource |
+
+Signals marked *pushed automatically* arrive at every app with no subscription: a plain
+`signal.receive` is enough. For other server-side changes, subscribe with `signal.with()`
+(below) or a channel.
 
 The OS holds the only websocket. Apps never open their own realtime socket. Use
 `connection` to show a "live updates paused" hint if that matters to your users.
@@ -121,7 +125,8 @@ if (!saveApi.error.value && saved)
 ```
 
 The OS re-broadcasts change keys and `resource` signals to every other app loaded in the
-browser tab. Server-side events reach other users through the realtime channels above.
+browser tab. Other users get the change from the server, through the realtime channels above.
+Documents need no broadcast: the server pushes `dmsFile` events to everyone, including you.
 
 ## Topics: app-to-app messages
 

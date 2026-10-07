@@ -1,5 +1,6 @@
 import type { DmsFile } from '@antcde/connect-ts'
 import { useApi } from '@antcde/vue-utils'
+import { useDebounceFn } from '@vueuse/core'
 import { computed, onScopeDispose, ref, shallowRef, watch } from 'vue'
 import { injectContext } from '@/plugins/context'
 import { useGlobalStore } from '@/stores/app.store'
@@ -87,13 +88,18 @@ export function useProjectFiles() {
   }
 
   // Other users' uploads, renames and deletes arrive as dmsFile signals.
+  // The OS pushes these to every app without a subscription. Debounced: one bulk action
+  // can produce many events.
+  const refresh = useDebounceFn(load, 300)
   const stop = signal.receive((s) => {
     if (s.dmsFile || s.dmsFileBatch)
-      void load()
+      void refresh()
   })
   onScopeDispose(() => stop())
 
-  watch([projectId, labelFilter], () => void load(), { immediate: true })
+  // Compare the filter by value: the computed returns a new object on every context change.
+  const labelFilterKey = computed(() => JSON.stringify(labelFilter.value))
+  watch([projectId, labelFilterKey], () => void load(), { immediate: true })
 
   return {
     files,

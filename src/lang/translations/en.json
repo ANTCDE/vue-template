@@ -10,8 +10,8 @@
     "common": {
       "docs": "Read more:",
       "needs": {
-        "license": "Select a license in ANT-OS to use this example.",
-        "project": "Select a project in ANT-OS to use this example."
+        "license": "Select a license in ANT-OS to continue.",
+        "project": "Select a project in ANT-OS to continue."
       }
     },
     "shell": {

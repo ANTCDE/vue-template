@@ -92,6 +92,11 @@ already follow the tokens and the accessibility rules.
   `useAppTourMode().connectContext(comms.context)` (exported by `@antcde/vue-utils`, and re-exported by
   the component library).
 
+**Bundle size.** The library doesn't mark itself side-effect free yet, so the first component you
+import pulls in the whole library (several hundred kB, including the rich-text editor). That cost is
+worth paying for a real form built from `Ant*` primitives. For a single dialog or button, a plain
+Vuetify component is lighter. Check `pnpm build` output after adding the first import.
+
 **Superseded:** `BaseAntInput` and `BaseAntDatePicker` still exist but are deprecated for new code
 (`SUPERSEDED_FIELD_COMPONENTS`). Use the `Ant*` primitives, and don't mix the two idioms in one form.
 
