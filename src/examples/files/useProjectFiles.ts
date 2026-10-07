@@ -1,0 +1,106 @@
+import type { DmsFile } from '@antcde/connect-ts'
+import { useApi } from '@antcde/vue-utils'
+import { computed, onScopeDispose, ref, shallowRef, watch } from 'vue'
+import { injectContext } from '@/plugins/context'
+import { useGlobalStore } from '@/stores/app.store'
+
+/** The project's DMS root: list, upload, preview. See docs/capabilities/files-dms.md. */
+export function useProjectFiles() {
+  const { comms: { connect, context, signal, notifications }, i18n: { t } } = injectContext()
+  const { licenseId, projectId, projectReadOnly } = useGlobalStore()
+
+  const listApi = useApi(connect.dms.getProjectFiles, null)
+  const urlsApi = useApi(connect.dms.getUploadUrls, null)
+  const finishApi = useApi(connect.dms.uploadFilesFinish, [])
+
+  const files = shallowRef<DmsFile[]>([])
+  const rootUploadAllowed = ref(false)
+  const uploading = ref(false)
+
+  // The OS label bar filters every app that opts in. Only apply it when the user
+  // chose to filter files.
+  const labelFilter = computed(() => {
+    const selected = context.value.selectedLabels
+    if (!selected?.labels.length || !selected.resources.includes('dms_files'))
+      return {}
+    return { label_ids: selected.labels, label_operator: selected.operator }
+  })
+
+  async function load() {
+    if (!projectId.value)
+      return
+    const result = await listApi.execute(projectId.value, { per_page: 25, sort_by: 'name', sort_dir: 'asc', ...labelFilter.value })
+    files.value = (result?.data ?? []).filter(file => !file.is_folder)
+    rootUploadAllowed.value = !!context.value.project?.user_permissions?.['dms.upload'] || !!context.value.project?.user_is_admin
+  }
+
+  /**
+   * Files can't cross the iframe boundary (arguments are cloned as JSON), so uploads go
+   * straight to storage: ask for presigned URLs, PUT the bytes, then tell DMS they arrived.
+   */
+  async function upload(selected: File[]) {
+    if (!projectId.value || selected.length === 0)
+      return
+    uploading.value = true
+    try {
+      const urls = await urlsApi.execute(projectId.value, selected.map(file => file.name))
+      if (!urls)
+        return
+      await Promise.all(urls.data.map(async (target) => {
+        const file = selected.find(candidate => candidate.name === target.filename)
+        if (!file)
+          return
+        const headers = Object.fromEntries(Object.entries(target.config.headers)
+          .filter(([name]) => name.toLowerCase() !== 'host')
+          .map(([name, values]) => [name, values.join(',')]))
+        const response = await fetch(target.config.url, { method: 'PUT', headers, body: file })
+        if (!response.ok)
+          throw new Error(`Upload of ${file.name} failed (${response.status})`)
+      }))
+      // `null` folder token = project root. 'keep_both' renames instead of overwriting.
+      await finishApi.execute(null, projectId.value, urls.data.map(({ key, filename }) => ({ key, filename })), 'keep_both')
+      if (!finishApi.error.value)
+        notifications.success(t('examples.files.uploaded', { count: selected.length }))
+    }
+    catch {
+      // The storage PUT is not an ANT API call, so the OS shows no toast for it — we must.
+      notifications.error(t('examples.files.uploadFailed'))
+    }
+    finally {
+      uploading.value = false
+      await load()
+    }
+  }
+
+  // Never download and render files yourself: hand the token to the OS preview window.
+  function preview(file: DmsFile) {
+    signal({
+      openFilePreview: {
+        fileToken: file.token,
+        fileName: file.extension ? `${file.name}.${file.extension}` : file.name,
+        fileExtension: file.extension ?? undefined,
+        fileSize: file.size ?? undefined,
+        projectId: file.project_id ?? undefined,
+        licenseId: licenseId.value ?? undefined,
+      },
+    })
+  }
+
+  // Other users' uploads, renames and deletes arrive as dmsFile signals.
+  const stop = signal.receive((s) => {
+    if (s.dmsFile || s.dmsFileBatch)
+      void load()
+  })
+  onScopeDispose(() => stop())
+
+  watch([projectId, labelFilter], () => void load(), { immediate: true })
+
+  return {
+    files,
+    isLoading: listApi.isLoading,
+    uploading,
+    canUpload: computed(() => rootUploadAllowed.value && !projectReadOnly.value),
+    upload,
+    preview,
+  }
+}

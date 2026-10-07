@@ -1,52 +1,104 @@
 {
   "app": {
-    "title": "Test app!",
-    "toolbarTitle": "Test App!",
-    "description": "Run your app and go to {link}. By default it shows the app hosted on port 5174, but you can change it by going to /developer/:port.",
-    "developerPage": "ANT OS developer page"
+    "title": "ANT App Template"
   },
-  "actions": {
-    "sendNotification": "Send notification",
-    "countIs": "count is {count}"
+  "common": {
+    "yes": "Yes",
+    "no": "No"
   },
-  "notifications": {
-    "amazing": "This is amazing!",
-    "itemClicked": "Item {index} clicked"
-  },
-  "toolbar": {
-    "count": "Count: {count}",
-    "menuItem": "Item {index}"
-  },
-  "sections": {
-    "queryParams": {
-      "title": "query params",
-      "description": "Change the query params in the URL to receive them in the app"
+  "examples": {
+    "common": {
+      "docs": "Read more:",
+      "needs": {
+        "license": "Select a license in ANT-OS to use this example.",
+        "project": "Select a project in ANT-OS to use this example."
+      }
     },
-    "selectSbs": {
-      "title": "Select SBS",
-      "description": "Select an SBS item to be shown and highlighted in the notepad"
+    "shell": {
+      "tab": "Shell",
+      "contextTitle": "Context from the OS",
+      "contextDescription": "The OS pushes the current user, license, project and selection. Read it; never fetch it.",
+      "user": "User",
+      "license": "License",
+      "project": "Project",
+      "selectedTask": "Selected task",
+      "sbs": "SBS code",
+      "readOnly": "Project read-only",
+      "licenseAdmin": "License admin",
+      "toolbarTitle": "Toolbar",
+      "toolbarDescription": "This app set the OS title bar, enabled its search box and added a menu item.",
+      "searchValue": "Search box value:",
+      "menuAbout": "About this template",
+      "aboutMessage": "Each tab demonstrates one platform capability.",
+      "notificationsTitle": "Notifications",
+      "notificationsDescription": "Toasts are shown by the OS, so they look the same in every app.",
+      "notifySuccess": "Show success",
+      "notifyWarning": "Show warning",
+      "successMessage": "Saved.",
+      "warningMessage": "Careful — this is a warning.",
+      "notepadTitle": "Notepad",
+      "notepadDescription": "Open the OS side panel on a specific tab.",
+      "notepadTab": {
+        "tasks": "Tasks",
+        "sbs": "SBS",
+        "apps": "Apps"
+      },
+      "notepadHide": "Close notepad",
+      "appStateTitle": "App state",
+      "appStateDescription": "A string the OS keeps in the URL for you — it survives a reload or a shared link.",
+      "appStateButton": "Clicked {count} times",
+      "navigateTitle": "Navigation",
+      "navigateDescription": "Ask the OS to navigate. The app never changes the top-level URL itself.",
+      "toDashboard": "Go to dashboard"
     },
-    "selectTask": {
-      "title": "Select Task",
-      "description": "Select a task to be shown in the notepad"
+    "tables": {
+      "tab": "Tables",
+      "title": "Dynamic table",
+      "description": "Reads and writes the {table} table declared in app-config.json.",
+      "newTitle": "New note title",
+      "add": "Add",
+      "delete": "Delete note {title}",
+      "empty": "No notes yet.",
+      "total": "{count} notes",
+      "created": "Note added."
     },
-    "notepad": {
-      "title": "Notepad",
-      "description": "Open a certain tab in the notepad"
+    "tasks": {
+      "tab": "Tasks",
+      "title": "Open tasks",
+      "description": "Click a task to open it in the notepad. Changes made anywhere appear here live.",
+      "licenseTask": "License task",
+      "openFlow": "Open workflow of {title}",
+      "close": "Close task {title}",
+      "empty": "No open tasks."
     },
-    "overlay": {
-      "title": "Overlay",
-      "description": "Show the task as a workflow"
+    "files": {
+      "tab": "Files",
+      "title": "Project files",
+      "description": "Files in the root of the project's document management. Click a file to preview it.",
+      "pick": "Choose files",
+      "upload": "Upload",
+      "uploaded": "{count} file(s) uploaded.",
+      "uploadFailed": "Upload failed. Please try again.",
+      "empty": "No files in the project root."
     },
-    "navigateTo": {
-      "title": "Navigate to",
-      "description": "Open a specific page or other app through an app"
+    "triggers": {
+      "tab": "Triggers",
+      "title": "Run a trigger",
+      "description": "The app only names the trigger. Credentials stay in the Vault and are added server-side.",
+      "pick": "Trigger",
+      "run": "Run"
+    },
+    "signals": {
+      "tab": "Signals",
+      "topicTitle": "Topic",
+      "topicDescription": "Publish on {topic}. Other apps on the topic receive it; the sender does not.",
+      "message": "Message",
+      "publish": "Publish",
+      "nothingReceived": "Nothing received yet.",
+      "splitTitle": "Split screen",
+      "splitDescription": "Open another app next to this one.",
+      "appTitle": "App title",
+      "openSplit": "Open in split"
     }
-  },
-  "navigation": {
-    "dashboard": "Dashboard",
-    "login": "Login",
-    "profile": "Profile",
-    "store": "ANT OS Store"
   }
 }

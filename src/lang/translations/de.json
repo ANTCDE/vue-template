@@ -1,52 +1,104 @@
 {
   "app": {
-    "title": "Test-App!",
-    "toolbarTitle": "Test-App!",
-    "description": "Starte deine App und gehe zu {link}. Standardmäßig wird die App auf Port 5174 angezeigt, aber du kannst dies über /developer/:port ändern.",
-    "developerPage": "ANT OS Entwicklerseite"
+    "title": "ANT App-Vorlage"
   },
-  "actions": {
-    "sendNotification": "Benachrichtigung senden",
-    "countIs": "Zähler ist {count}"
+  "common": {
+    "yes": "Ja",
+    "no": "Nein"
   },
-  "notifications": {
-    "amazing": "Das ist fantastisch!",
-    "itemClicked": "Element {index} angeklickt"
-  },
-  "toolbar": {
-    "count": "Zähler: {count}",
-    "menuItem": "Element {index}"
-  },
-  "sections": {
-    "queryParams": {
-      "title": "Query-Parameter",
-      "description": "Ändere die Query-Parameter in der URL, um sie in der App zu empfangen"
+  "examples": {
+    "common": {
+      "docs": "Mehr lesen:",
+      "needs": {
+        "license": "Wählen Sie in ANT-OS eine Lizenz, um dieses Beispiel zu nutzen.",
+        "project": "Wählen Sie in ANT-OS ein Projekt, um dieses Beispiel zu nutzen."
+      }
     },
-    "selectSbs": {
-      "title": "SBS auswählen",
-      "description": "Wähle ein SBS-Element aus, um es im Notizblock anzuzeigen und hervorzuheben"
+    "shell": {
+      "tab": "Shell",
+      "contextTitle": "Kontext aus dem OS",
+      "contextDescription": "Das OS liefert den aktuellen Benutzer, die Lizenz, das Projekt und die Auswahl. Lesen Sie diese aus; rufen Sie sie nie selbst ab.",
+      "user": "Benutzer",
+      "license": "Lizenz",
+      "project": "Projekt",
+      "selectedTask": "Ausgewählte Aufgabe",
+      "sbs": "SBS-Code",
+      "readOnly": "Projekt schreibgeschützt",
+      "licenseAdmin": "Lizenzadministrator",
+      "toolbarTitle": "Symbolleiste",
+      "toolbarDescription": "Diese App hat die Titelleiste des OS gesetzt, das Suchfeld aktiviert und einen Menüeintrag hinzugefügt.",
+      "searchValue": "Wert des Suchfelds:",
+      "menuAbout": "Über diese Vorlage",
+      "aboutMessage": "Jeder Tab zeigt eine Plattformfunktion.",
+      "notificationsTitle": "Benachrichtigungen",
+      "notificationsDescription": "Benachrichtigungen zeigt das OS an, damit sie in jeder App gleich aussehen.",
+      "notifySuccess": "Erfolg anzeigen",
+      "notifyWarning": "Warnung anzeigen",
+      "successMessage": "Gespeichert.",
+      "warningMessage": "Achtung — dies ist eine Warnung.",
+      "notepadTitle": "Notizblock",
+      "notepadDescription": "Öffnet das Seitenpanel des OS auf einem bestimmten Tab.",
+      "notepadTab": {
+        "tasks": "Aufgaben",
+        "sbs": "SBS",
+        "apps": "Apps"
+      },
+      "notepadHide": "Notizblock schließen",
+      "appStateTitle": "App-Status",
+      "appStateDescription": "Ein Text, den das OS für Sie in der URL speichert — bleibt nach dem Neuladen oder in einem geteilten Link erhalten.",
+      "appStateButton": "{count}-mal geklickt",
+      "navigateTitle": "Navigation",
+      "navigateDescription": "Bitten Sie das OS zu navigieren. Die App ändert die oberste URL nie selbst.",
+      "toDashboard": "Zum Dashboard"
     },
-    "selectTask": {
-      "title": "Aufgabe auswählen",
-      "description": "Wähle eine Aufgabe aus, um sie im Notizblock anzuzeigen"
+    "tables": {
+      "tab": "Tabellen",
+      "title": "Dynamische Tabelle",
+      "description": "Liest und schreibt die Tabelle {table} aus app-config.json.",
+      "newTitle": "Titel der neuen Notiz",
+      "add": "Hinzufügen",
+      "delete": "Notiz {title} löschen",
+      "empty": "Noch keine Notizen.",
+      "total": "{count} Notizen",
+      "created": "Notiz hinzugefügt."
     },
-    "notepad": {
-      "title": "Notizblock",
-      "description": "Öffne einen bestimmten Tab im Notizblock"
+    "tasks": {
+      "tab": "Aufgaben",
+      "title": "Offene Aufgaben",
+      "description": "Klicken Sie auf eine Aufgabe, um sie im Notizblock zu öffnen. Änderungen von anderswo erscheinen hier sofort.",
+      "licenseTask": "Lizenzaufgabe",
+      "openFlow": "Workflow von {title} öffnen",
+      "close": "Aufgabe {title} schließen",
+      "empty": "Keine offenen Aufgaben."
     },
-    "overlay": {
-      "title": "Overlay",
-      "description": "Zeige die Aufgabe als Workflow an"
+    "files": {
+      "tab": "Dateien",
+      "title": "Projektdateien",
+      "description": "Dateien im Stammordner der Dokumentenverwaltung des Projekts. Klicken Sie auf eine Datei für eine Vorschau.",
+      "pick": "Dateien wählen",
+      "upload": "Hochladen",
+      "uploaded": "{count} Datei(en) hochgeladen.",
+      "uploadFailed": "Hochladen fehlgeschlagen. Bitte erneut versuchen.",
+      "empty": "Keine Dateien im Stammordner des Projekts."
     },
-    "navigateTo": {
-      "title": "Navigieren zu",
-      "description": "Öffne eine bestimmte Seite oder andere App über eine App"
+    "triggers": {
+      "tab": "Trigger",
+      "title": "Trigger ausführen",
+      "description": "Die App nennt nur den Trigger. Zugangsdaten bleiben im Vault und werden serverseitig ergänzt.",
+      "pick": "Trigger",
+      "run": "Ausführen"
+    },
+    "signals": {
+      "tab": "Signale",
+      "topicTitle": "Topic",
+      "topicDescription": "Veröffentlichen auf {topic}. Andere Apps im Topic empfangen es; der Absender nicht.",
+      "message": "Nachricht",
+      "publish": "Veröffentlichen",
+      "nothingReceived": "Noch nichts empfangen.",
+      "splitTitle": "Geteilter Bildschirm",
+      "splitDescription": "Öffnet eine andere App neben dieser.",
+      "appTitle": "App-Titel",
+      "openSplit": "Geteilt öffnen"
     }
-  },
-  "navigation": {
-    "dashboard": "Dashboard",
-    "login": "Anmelden",
-    "profile": "Profil",
-    "store": "ANT OS Store"
   }
 }

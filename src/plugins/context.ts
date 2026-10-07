@@ -1,18 +1,12 @@
 /**
- * App context — the central integration point with ANT-OS.
+ * App context — the single integration point with ANT-OS. See docs/shell-integration.md.
  *
- * Uses `useSingleton` to create a provide/inject pair that gives every
- * component access to:
- * - `comms` — ANT-OS communication (toolbar, notepad, signals, context, connect API)
- * - `i18n` — internationalization (auto-syncs locale with user's ANT-OS language)
- * - `colorMode` — dark/light mode preference (synced with ANT-OS theme)
- *
- * Usage in components:
+ * Usage in any component or composable:
  *   const { comms, i18n, colorMode } = injectContext()
- *   const { toolbar, notepad, context, connect, notifications, signal } = comms
  */
 import type { UseAntColorModeReturn, UseAntI18nReturn, UseCommsClient } from '@antcde/vue-utils'
 import { useAntColorMode, useAntI18n, useCommsClient, useSingleton } from '@antcde/vue-utils'
+import rawManifest from '../../app-config.json?raw'
 
 export interface Context {
   comms: UseCommsClient
@@ -20,10 +14,13 @@ export interface Context {
   colorMode: UseAntColorModeReturn
 }
 
+// The name 'appContext' is what the test helpers inject under — keep it.
 export const [provideContext, injectContext] = useSingleton<Context>(
   'appContext',
   () => {
-    const comms = useCommsClient()
+    // No `connect` argument: every connect.* call is proxied through the OS, which holds the
+    // session. The app never sees a token. See docs/calling-the-api.md.
+    const comms = useCommsClient(undefined, undefined, JSON.parse(rawManifest))
     const colorMode = useAntColorMode(comms)
     const i18n = useAntI18n(comms)
 

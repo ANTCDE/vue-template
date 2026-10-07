@@ -1,8 +1,8 @@
 {
   "name": "ant-app-vue-template",
-  "private": false,
-  "version": "1.0.0",
   "type": "module",
+  "version": "2.0.0",
+  "private": false,
   "scripts": {
     "dev": "vite --port 5174",
     "build": "pnpm clear && vite build && pnpm copy && pnpm zip",
@@ -41,7 +41,7 @@
     "@vue/test-utils": "^2.4.11",
     "eslint": "^10.6.0",
     "happy-dom": "^20.10.6",
-    "typescript": "~7.0.2",
+    "typescript": "~6.0.3",
     "unocss": "^66.7.4",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-icons": "^24.0.0",
