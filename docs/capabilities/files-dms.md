@@ -114,36 +114,60 @@ Other preview options:
 
 ## Uploading from your own origin
 
-The presigned `PUT` is the one request that goes **from your app's own origin straight to object
-storage**. Every `connect` call goes through the OS, from the OS's origin, so CORS never
-applies to those. The storage PUT is a cross-origin browser request, so the storage bucket's CORS
-policy decides whether it may happen.
+ANT stores documents in **Amazon S3**. `getUploadUrls` returns a presigned S3 URL per file:
+SigV4, signed in the query string, with `X-Amz-SignedHeaders=host` and `UNSIGNED-PAYLOAD`, valid
+for **300 seconds**. Your app `PUT`s the bytes to that URL **from its own origin**, straight to S3.
+This is the one request in the upload flow where CORS applies. Every `connect` call goes through
+the OS, from the OS's origin.
 
 | Where your app runs | Origin of the PUT | Works? |
 | --- | --- | --- |
-| Installed from the App Store | The platform's own app origin | Yes, the platform's storage allows it |
-| Developer mode (`/developer/<port>`) | `http://localhost:<port>` | Only if the environment's storage CORS allows that origin |
-| Self-hosted (absolute URL) | Your domain | Only if the environment's storage CORS allows your domain |
+| Installed from the App Store | The platform's own app origin | Yes, allowed by the bucket |
+| Developer mode (`/developer/<port>`) | `http://localhost:<port>` | Only if the environment's S3 bucket CORS allows that origin |
+| Self-hosted (absolute URL) | Your domain | Only if the environment's S3 bucket CORS allows your domain |
 
-**What the storage CORS policy must allow** for your origin:
+**The S3 CORS rule your origin needs** on the environment's document bucket:
 
-- **Origin:** your exact origin, for example `http://localhost:5174` or `https://apps.example.com`.
-- **Method:** `PUT`.
-- **Headers:** `Content-Type`, or `*`. The browser sends the file's type.
-- **Expose:** `ETag` (optional; useful for checks).
+```json
+{
+  "AllowedOrigins": ["http://localhost:*", "http://127.0.0.1:*"],
+  "AllowedMethods": ["PUT"],
+  "AllowedHeaders": ["*"],
+  "ExposeHeaders": ["ETag"],
+  "MaxAgeSeconds": 3000
+}
+```
 
-That policy is a setting of the ANT environment you develop against, not something your app or
-the template can change. If uploads fail from a local dev server, ask the environment's operator
-to allow your development origin on the document storage. Everything else (listing, preview,
-labels, delete) works without it.
+Swap the origins for your own domain if you self-host. S3 allows one `*` per origin entry, so
+`http://localhost:*` covers every dev port. This is a setting of the ANT environment you develop
+against, not of your app. If uploads fail from a local dev server, ask the environment's operator
+to add your origin. Everything else (listing, preview, labels, delete) works without it.
 
-**How the failure looks.** In the browser console there is a red error like *"Access to fetch at
-'https://<storage host>/…' from origin 'http://localhost:5174' has been blocked by CORS policy:
-No 'Access-Control-Allow-Origin' header…"*. The request is an `OPTIONS` preflight or a `PUT` to the
-storage host, **not** to the ANT API. In code, `fetch` rejects with a `TypeError`. The template's
-Files example turns that into a specific message (`src/examples/files/useProjectFiles.ts`).
+**How to send the PUT** (the template's `useProjectFiles.ts` does exactly this):
 
-Don't work around it by sending file bytes through `connect` (`uploadFilesToFolder`, base64 in
+- Send the headers the URL comes with (`config.headers`), minus `Host`, which the browser sets
+  itself. With `SignedHeaders=host` that is nothing else.
+- **Add no headers of your own.** In particular no `x-amz-*` headers (`x-amz-acl`,
+  `x-amz-meta-*`, …): S3 rejects a request with `x-amz-*` headers that aren't in the signature
+  (403). The `Content-Type` the browser derives from the file is fine, because it is **not**
+  signed. Only `host` is. If the URL ever signed `content-type`, the value you send would have to
+  match exactly, or the signature check would fail. That is why you forward `config.headers` as
+  given rather than building your own.
+- `PUT` the `File` itself as the body. Don't read it into a string or base64 first.
+- Request the URLs right before uploading. They expire 300 s after they are issued; S3 checks the
+  expiry when the upload starts.
+
+**How the failure looks.** The console shows *"Access to fetch at
+'https://<bucket>.s3.<region>.amazonaws.com/temp-uploads/…' from origin 'http://localhost:5174' has
+been blocked by CORS policy: Response to preflight request doesn't pass access control check: No
+'Access-Control-Allow-Origin' header…"*. The failing request is the `OPTIONS` preflight (or the
+`PUT`) to the **S3 host**, not to the ANT API. In code, `fetch` rejects with a `TypeError`, which
+the template's Files example reports as a storage CORS refusal.
+
+A `403` from S3 that does reach your code is a different problem: an expired URL (older than
+300 s) or extra, unsigned headers.
+
+Don't work around CORS by sending file bytes through `connect` (`uploadFilesToFolder`, base64 in
 JSON). They are cloned as JSON across the iframe boundary and don't arrive.
 
 ## Realtime

@@ -55,6 +55,8 @@ export function useProjectFiles() {
         const file = selected.find(candidate => candidate.name === target.filename)
         if (!file)
           return
+        // Forward exactly the headers the URL was signed with (SigV4 signs only `host`), minus Host,
+        // which the browser sets. Add none of your own: unsigned x-amz-* headers get a 403.
         const headers = Object.fromEntries(Object.entries(target.config.headers)
           .filter(([name]) => name.toLowerCase() !== 'host')
           .map(([name, values]) => [name, values.join(',')]))
@@ -69,8 +71,8 @@ export function useProjectFiles() {
     }
     catch (error) {
       // The storage PUT is not an ANT API call, so the OS shows no toast for it — we must.
-      // fetch rejects with a TypeError when the request never got a response — typically storage
-      // CORS refusing this app's origin (a local dev server or a self-hosted app). See
+      // A TypeError means the PUT never got a response: the S3 bucket's CORS doesn't allow this
+      // app's origin (a local dev server or a self-hosted app). See
       // docs/capabilities/files-dms.md#uploading-from-your-own-origin.
       notifications.error(t(error instanceof TypeError ? 'examples.files.storageBlocked' : 'examples.files.uploadFailed', { origin: window.location.origin }))
     }

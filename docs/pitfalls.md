@@ -110,38 +110,44 @@
     (`dms_files`, `projects`, …).
 
 37. **Upload fails from `/developer/<port>` (or a self-hosted app) with a CORS error, but works in
-    the installed app.** The presigned `PUT` goes from your origin straight to object storage, and
-    the environment's storage CORS policy doesn't allow that origin. → An environment setting: ask
-    the operator to allow your origin for `PUT` on the document storage. Other API calls are
-    unaffected, because they go through the OS.
+    the installed app.** The presigned `PUT` goes from your origin straight to Amazon S3, and the
+    environment's S3 bucket CORS doesn't allow that origin (the console names an
+    `*.s3.<region>.amazonaws.com` URL). → An environment setting: the bucket needs a CORS rule
+    allowing your origin (e.g. `http://localhost:*`) for `PUT`, with headers `*` and exposed `ETag`.
+    Other API calls are unaffected, because they go through the OS.
+    [files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin)
+
+38. **The S3 `PUT` returns 403.** The URL expired (it is valid for 300 s), or you added headers
+    that aren't signed, such as `x-amz-*`. → Request the URLs right before uploading; send only
+    `config.headers` minus `Host`.
     [files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin)
 
 ## Triggers and Vault
 
-38. **Third-party API keys are stored in a table column, or provider tokens are minted in the
+39. **Third-party API keys are stored in a table column, or provider tokens are minted in the
     browser.** → Store credentials in the Vault, bind them to a trigger, and dispatch the
     trigger. The app never sees the credential. [vault.md](capabilities/vault.md)
-39. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
+40. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
     `useApi(connect.webhookTriggers.dispatch, null, { throwError: true })`.
-40. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
+41. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
     a successful (200) result, not an error. → Wrap the dispatch in `useTriggerDispatch(comms)`.
-41. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
+42. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
     `connect.webhookTriggers.dispatch`. It goes through the OS session and works with Vault
     bindings and consent.
 
 ## Build, tooling and tests
 
-42. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
+43. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
     cover only `vue`, `@vueuse/core`, `@vueuse/math`, `useDisplay` and `src/composables|stores|plugins`. →
     Import everything else explicitly.
-43. **Type-check fails on a fresh clone with unknown globals.** The generated
+44. **Type-check fails on a fresh clone with unknown globals.** The generated
     `auto-imports.d.ts` / `components.d.ts` don't exist yet. → Run `pnpm dev` or `pnpm build`
     once.
-44. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
+45. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
     and `CHANGELOG.md` disagree. → Bump all three together.
-45. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
+46. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
     `createAnt*` factories; pass overrides instead of replacing them.
-46. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
+47. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
     swallows errors even with `throwError: true`. → Assert on `api.error` / UI state, not on a
     thrown error. [testing.md](testing.md)
 

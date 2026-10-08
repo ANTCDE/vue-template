@@ -128,13 +128,14 @@ environment's own domain. Whether a request works depends on **which origin send
 | `comms.connect.*` API calls (the default) | The OS page | No. The OS makes the call; your origin is never involved |
 | `comms.request(...)` | The OS page | No |
 | Signals, context, toolbar, preview | `postMessage` | No |
-| DMS upload: the presigned `PUT` to storage | Your app (`http://localhost:<port>`) | **Yes: the environment's storage CORS must allow your origin.** See [capabilities/files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin) |
+| DMS upload: the presigned `PUT` to Amazon S3 | Your app (`http://localhost:<port>`) | **Yes: the environment's S3 bucket CORS must allow your origin for `PUT`.** See [capabilities/files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin) |
 | Direct API calls with your own token (`newAntConnect(newAntHttpClient(...))`) | Your app | **Yes: the API's CORS allowlist must contain your exact origin** |
 | Your own `fetch` to third-party services | Your app | Yes, governed by that service. Prefer a trigger (see [capabilities/triggers.md](capabilities/triggers.md)) |
 
 So with the default setup, the only thing that can hit CORS in developer mode is uploading files.
-If an environment doesn't allow your development origin on its storage, everything except
-uploads still works. Uploads work again once the app is installed, or once the environment
+That is exactly what happens against an environment whose S3 bucket doesn't list
+`http://localhost:*`: the browser blocks the `PUT` to `*.s3.<region>.amazonaws.com`, and
+everything except uploads keeps working. Uploads work again once the app is installed, or once the environment
 allows the origin.
 
 ### Declared tables don't exist in developer mode
