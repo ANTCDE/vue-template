@@ -85,7 +85,8 @@
       "uploaded": "{count} file(s) uploaded.",
       "uploadFailed": "Upload failed. Please try again.",
       "empty": "No files in the project root.",
-      "noUploadRight": "You can't upload here: you need upload rights in this project, and the project must not be archived."
+      "noUploadRight": "You can't upload here: you need upload rights in this project, and the project must not be archived.",
+      "storageBlocked": "Storage refused the upload from {origin}. Its CORS policy must allow this origin (needed for local development and self-hosted apps)."
     },
     "triggers": {
       "tab": "Triggers",

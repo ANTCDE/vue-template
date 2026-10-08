@@ -104,6 +104,16 @@ yourself. Third parties may do this. Two consequences:
 
    Context, toolbar, notifications and signals still come from the OS as usual.
 
+3. **Your origin must be allowed by the environment.** A self-hosted app sends some requests from
+   its own domain:
+   - **DMS uploads** (the presigned `PUT` to storage), in every mode;
+   - **every API call**, in own-token mode.
+
+   Both are refused by the browser unless the environment's CORS settings allow your exact origin:
+   the document storage for uploads, the API for direct calls. Ask the environment's operator to
+   add it, and include your development origins (`http://localhost:<port>`) if you want uploads to
+   work while developing. See [capabilities/files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin).
+
 Most apps should keep the default proxy mode: the app holds no token at all, and access is always
 exactly what the signed-in user is allowed to do. See [calling-the-api.md](calling-the-api.md).
 

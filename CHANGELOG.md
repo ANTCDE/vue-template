@@ -19,6 +19,8 @@ the built app and shown in the ANT App Store.
   development" button, when its table doesn't exist yet (always the case at `/developer/<port>`).
 - Files example: upload is enabled for project and license admins (previously only users with an
   explicit upload grant), shows why it is disabled otherwise, and lists newest files first.
+- Files example: an upload refused by storage CORS (local dev server, self-hosted app) now says
+  so, instead of a generic failure.
 
 ## 1.0.0
 

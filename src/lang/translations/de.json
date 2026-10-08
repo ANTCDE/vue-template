@@ -85,7 +85,8 @@
       "uploaded": "{count} Datei(en) hochgeladen.",
       "uploadFailed": "Hochladen fehlgeschlagen. Bitte erneut versuchen.",
       "empty": "Keine Dateien im Stammordner des Projekts.",
-      "noUploadRight": "Sie können hier nicht hochladen: Sie benötigen Upload-Rechte in diesem Projekt, und das Projekt darf nicht archiviert sein."
+      "noUploadRight": "Sie können hier nicht hochladen: Sie benötigen Upload-Rechte in diesem Projekt, und das Projekt darf nicht archiviert sein.",
+      "storageBlocked": "Der Speicher hat den Upload von {origin} abgelehnt. Seine CORS-Richtlinie muss diesen Origin erlauben (nötig für lokale Entwicklung und selbst gehostete Apps)."
     },
     "triggers": {
       "tab": "Trigger",

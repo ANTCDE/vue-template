@@ -118,6 +118,25 @@ with your real session, context and realtime. For another port use `/developer/<
 Opened directly at `http://localhost:5174`, outside the OS, the app has no host: comms never
 connects and API calls fail. Always develop inside the OS.
 
+### What crosses origins in developer mode
+
+In developer mode your code runs on `http://localhost:<port>`, inside an OS page on the
+environment's own domain. Whether a request works depends on **which origin sends it**:
+
+| Request | Sent from | CORS needed? |
+| --- | --- | --- |
+| `comms.connect.*` API calls (the default) | The OS page | No. The OS makes the call; your origin is never involved |
+| `comms.request(...)` | The OS page | No |
+| Signals, context, toolbar, preview | `postMessage` | No |
+| DMS upload: the presigned `PUT` to storage | Your app (`http://localhost:<port>`) | **Yes: the environment's storage CORS must allow your origin.** See [capabilities/files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin) |
+| Direct API calls with your own token (`newAntConnect(newAntHttpClient(...))`) | Your app | **Yes: the API's CORS allowlist must contain your exact origin** |
+| Your own `fetch` to third-party services | Your app | Yes, governed by that service. Prefer a trigger (see [capabilities/triggers.md](capabilities/triggers.md)) |
+
+So with the default setup, the only thing that can hit CORS in developer mode is uploading files.
+If an environment doesn't allow your development origin on its storage, everything except
+uploads still works. Uploads work again once the app is installed, or once the environment
+allows the origin.
+
 ### Declared tables don't exist in developer mode
 
 The developer URL loads your code, but the app is **not installed or activated**. So nothing in

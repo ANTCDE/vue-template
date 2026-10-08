@@ -197,6 +197,9 @@ const comms = useCommsClient(connect) // still embedded in the OS: calls now go 
 - With your own client the OS no longer adds context for you. Pass license and project ids
   explicitly where a method asks for them, and handle token expiry and errors yourself.
   The OS toast and the error stripping no longer apply.
+- Calls now leave **your** origin, so the environment's API must allow it by CORS. The allowlist
+  holds exact origins (no wildcards), so `https://apps.example.com` and `http://localhost:5174` each
+  need their own entry. That is an environment setting: ask the operator to add your origins.
 
 ## See also
 

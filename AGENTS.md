@@ -140,6 +140,8 @@ export function useThings() {
 - Deep links: read `context.initialRouteQuery` once at startup; write with `signal({ route })`.
 - Writes to a table need its **id**, not its name. Declared tables exist only after activation,
   so never in `/developer/<port>` mode: handle a missing table (see docs/app-anatomy.md).
+- In `/developer/<port>` mode only DMS uploads leave your origin (presigned PUT to storage). A CORS
+  error there is an environment setting, not a code bug (see docs/capabilities/files-dms.md).
 - Gate writes with `usePermissions` (`isProjectAdmin` or the grant). `user_permissions` alone
   misses admins.
 - `.with()` subscriptions are bound to the project at subscribe time: re-subscribe on switch.

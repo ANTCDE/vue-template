@@ -67,9 +67,12 @@ export function useProjectFiles() {
       if (!finishApi.error.value)
         notifications.success(t('examples.files.uploaded', { count: selected.length }))
     }
-    catch {
+    catch (error) {
       // The storage PUT is not an ANT API call, so the OS shows no toast for it — we must.
-      notifications.error(t('examples.files.uploadFailed'))
+      // fetch rejects with a TypeError when the request never got a response — typically storage
+      // CORS refusing this app's origin (a local dev server or a self-hosted app). See
+      // docs/capabilities/files-dms.md#uploading-from-your-own-origin.
+      notifications.error(t(error instanceof TypeError ? 'examples.files.storageBlocked' : 'examples.files.uploadFailed', { origin: window.location.origin }))
     }
     finally {
       uploading.value = false

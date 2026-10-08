@@ -112,6 +112,40 @@ Other preview options:
 | `tasks.linkDmsFileToTask(taskId, dmsFileId)` | Attach an existing DMS file to a task |
 | `tasks.uploadTaskAppendix(taskId, { data: base64, extension, name })` | Attach a new small file directly to a task |
 
+## Uploading from your own origin
+
+The presigned `PUT` is the one request that goes **from your app's own origin straight to object
+storage**. Every `connect` call goes through the OS, from the OS's origin, so CORS never
+applies to those. The storage PUT is a cross-origin browser request, so the storage bucket's CORS
+policy decides whether it may happen.
+
+| Where your app runs | Origin of the PUT | Works? |
+| --- | --- | --- |
+| Installed from the App Store | The platform's own app origin | Yes, the platform's storage allows it |
+| Developer mode (`/developer/<port>`) | `http://localhost:<port>` | Only if the environment's storage CORS allows that origin |
+| Self-hosted (absolute URL) | Your domain | Only if the environment's storage CORS allows your domain |
+
+**What the storage CORS policy must allow** for your origin:
+
+- **Origin:** your exact origin, for example `http://localhost:5174` or `https://apps.example.com`.
+- **Method:** `PUT`.
+- **Headers:** `Content-Type`, or `*`. The browser sends the file's type.
+- **Expose:** `ETag` (optional; useful for checks).
+
+That policy is a setting of the ANT environment you develop against, not something your app or
+the template can change. If uploads fail from a local dev server, ask the environment's operator
+to allow your development origin on the document storage. Everything else (listing, preview,
+labels, delete) works without it.
+
+**How the failure looks.** In the browser console there is a red error like *"Access to fetch at
+'https://<storage host>/…' from origin 'http://localhost:5174' has been blocked by CORS policy:
+No 'Access-Control-Allow-Origin' header…"*. The request is an `OPTIONS` preflight or a `PUT` to the
+storage host, **not** to the ANT API. In code, `fetch` rejects with a `TypeError`. The template's
+Files example turns that into a specific message (`src/examples/files/useProjectFiles.ts`).
+
+Don't work around it by sending file bytes through `connect` (`uploadFilesToFolder`, base64 in
+JSON). They are cloned as JSON across the iframe boundary and don't arrive.
+
 ## Realtime
 
 The OS relays file changes made by other users as signals. Their payloads don't include `owner` or
@@ -130,6 +164,8 @@ onScopeDispose(stop)
 - Don't pass `File`, `Blob` or `FormData` to `connect.dms.*`. Avoid `uploadFilesToFolder` from an iframe app.
 - Don't download a file and render it yourself when `openFilePreview` can show it.
 - Don't assume root permissions apply inside folders. Read the `permissions` on each item.
+- Don't assume an upload that works in the installed app also works from `/developer/<port>`. The
+  storage CORS policy decides that (see [Uploading from your own origin](#uploading-from-your-own-origin)).
 - Don't fetch an `external` download URL with `fetch()`. The browser can't read cross-origin source links.
 
 ## See also

@@ -85,7 +85,8 @@
       "uploaded": "{count} bestand(en) geüpload.",
       "uploadFailed": "Uploaden mislukt. Probeer het opnieuw.",
       "empty": "Geen bestanden in de hoofdmap van het project.",
-      "noUploadRight": "Je kunt hier niet uploaden: je hebt uploadrechten in dit project nodig en het project mag niet gearchiveerd zijn."
+      "noUploadRight": "Je kunt hier niet uploaden: je hebt uploadrechten in dit project nodig en het project mag niet gearchiveerd zijn.",
+      "storageBlocked": "De opslag weigerde de upload vanaf {origin}. Het CORS-beleid van de opslag moet deze origin toestaan (nodig voor lokale ontwikkeling en zelf gehoste apps)."
     },
     "triggers": {
       "tab": "Triggers",
