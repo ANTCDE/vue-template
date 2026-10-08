@@ -86,7 +86,13 @@
       "uploadFailed": "Upload failed. Please try again.",
       "empty": "No files in the project root.",
       "noUploadRight": "You can't upload here: you need upload rights in this project, and the project must not be archived.",
-      "storageBlocked": "Storage refused the upload from {origin}. Its CORS policy must allow this origin (needed for local development and self-hosted apps)."
+      "cancel": "Cancel",
+      "progress": "Upload progress",
+      "uploadFailedSome": "These files could not be uploaded: {names}",
+      "mode": {
+        "host": "Last upload was performed by ANT-OS.",
+        "local": "Last upload was performed by this app (this ANT-OS version can't upload on its behalf)."
+      }
     },
     "triggers": {
       "tab": "Triggers",

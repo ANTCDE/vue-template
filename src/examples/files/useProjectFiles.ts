@@ -1,4 +1,4 @@
-import type { DmsFile } from '@antcde/connect-ts'
+import type { DmsFile, DmsUploadHandle } from '@antcde/connect-ts'
 import { useApi } from '@antcde/vue-utils'
 import { useDebounceFn } from '@vueuse/core'
 import { computed, onScopeDispose, ref, shallowRef, watch } from 'vue'
@@ -7,15 +7,18 @@ import { useGlobalStore } from '@/stores/app.store'
 
 /** The project's DMS root: list, upload, preview. See docs/capabilities/files-dms.md. */
 export function useProjectFiles() {
-  const { comms: { connect, context, signal, notifications }, i18n: { t } } = injectContext()
+  const { comms, i18n: { t } } = injectContext()
+  const { connect, context, signal, notifications } = comms
   const { licenseId, projectId, projectReadOnly, permissions } = useGlobalStore()
 
   const listApi = useApi(connect.dms.getProjectFiles, null)
-  const urlsApi = useApi(connect.dms.getUploadUrls, null)
-  const finishApi = useApi(connect.dms.uploadFilesFinish, [])
 
   const files = shallowRef<DmsFile[]>([])
   const uploading = ref(false)
+  const progress = ref(0)
+  // 'host': the OS did the transfer. 'local': an older OS without it, so this frame did.
+  const lastMode = ref<'host' | 'local' | null>(null)
+  let current: DmsUploadHandle | null = null
 
   // The OS label bar filters every app that opts in. Only apply it when the user
   // chose to filter files.
@@ -39,47 +42,48 @@ export function useProjectFiles() {
     files.value = (result?.data ?? []).filter(file => !file.is_folder)
   }
 
-  /**
-   * Files can't cross the iframe boundary (arguments are cloned as JSON), so uploads go
-   * straight to storage: ask for presigned URLs, PUT the bytes, then tell DMS they arrived.
-   */
+  // The OS performs the transfer (upload URLs → PUT → finish) from its own origin, so this works
+  // from /developer/<port> and self-hosted apps too. See docs/capabilities/files-dms.md.
   async function upload(selected: File[]) {
     if (!projectId.value || selected.length === 0)
       return
     uploading.value = true
+    progress.value = 0
+    const total = selected.reduce((sum, file) => sum + file.size, 0)
+    const loaded = new Map<number, number>()
     try {
-      const urls = await urlsApi.execute(projectId.value, selected.map(file => file.name))
-      if (!urls)
-        return
-      await Promise.all(urls.data.map(async (target) => {
-        const file = selected.find(candidate => candidate.name === target.filename)
-        if (!file)
-          return
-        // Forward exactly the headers the URL was signed with (SigV4 signs only `host`), minus Host,
-        // which the browser sets. Add none of your own: unsigned x-amz-* headers get a 403.
-        const headers = Object.fromEntries(Object.entries(target.config.headers)
-          .filter(([name]) => name.toLowerCase() !== 'host')
-          .map(([name, values]) => [name, values.join(',')]))
-        const response = await fetch(target.config.url, { method: 'PUT', headers, body: file })
-        if (!response.ok)
-          throw new Error(`Upload of ${file.name} failed (${response.status})`)
-      }))
-      // `null` folder token = project root. 'keep_both' renames instead of overwriting.
-      await finishApi.execute(null, projectId.value, urls.data.map(({ key, filename }) => ({ key, filename })), 'keep_both')
-      if (!finishApi.error.value)
-        notifications.success(t('examples.files.uploaded', { count: selected.length }))
+      current = comms.uploadDmsFiles(selected, {
+        scope: 'project',
+        folderToken: null, // project root
+        duplicateAction: 'keep_both', // rename instead of overwriting
+        onProgress: (event) => {
+          loaded.set(event.index, event.loaded)
+          progress.value = total ? Math.round([...loaded.values()].reduce((a, b) => a + b, 0) / total * 100) : 100
+        },
+      })
+      lastMode.value = await current.mode
+      // One result per file: a failed file doesn't fail the batch.
+      const results = await current.done
+      const done = results.filter(result => result.status === 'done')
+      const failed = results.filter(result => result.status === 'error')
+      if (done.length)
+        notifications.success(t('examples.files.uploaded', { count: done.length }))
+      if (failed.length)
+        notifications.error(t('examples.files.uploadFailedSome', { names: failed.map(result => result.filename).join(', ') }))
     }
-    catch (error) {
-      // The storage PUT is not an ANT API call, so the OS shows no toast for it — we must.
-      // A TypeError means the PUT never got a response: the S3 bucket's CORS doesn't allow this
-      // app's origin (a local dev server or a self-hosted app). See
-      // docs/capabilities/files-dms.md#uploading-from-your-own-origin.
-      notifications.error(t(error instanceof TypeError ? 'examples.files.storageBlocked' : 'examples.files.uploadFailed', { origin: window.location.origin }))
+    catch {
+      // Nothing could start: no project in context, or the project is archived.
+      notifications.error(t('examples.files.uploadFailed'))
     }
     finally {
+      current = null
       uploading.value = false
       await load()
     }
+  }
+
+  function cancelUpload() {
+    current?.cancel()
   }
 
   // Never download and render files yourself: hand the token to the OS preview window.
@@ -114,6 +118,9 @@ export function useProjectFiles() {
     files,
     isLoading: listApi.isLoading,
     uploading,
+    progress,
+    lastMode,
+    cancelUpload,
     canUpload,
     upload,
     preview,

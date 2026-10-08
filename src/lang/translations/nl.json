@@ -86,7 +86,13 @@
       "uploadFailed": "Uploaden mislukt. Probeer het opnieuw.",
       "empty": "Geen bestanden in de hoofdmap van het project.",
       "noUploadRight": "Je kunt hier niet uploaden: je hebt uploadrechten in dit project nodig en het project mag niet gearchiveerd zijn.",
-      "storageBlocked": "De opslag weigerde de upload vanaf {origin}. Het CORS-beleid van de opslag moet deze origin toestaan (nodig voor lokale ontwikkeling en zelf gehoste apps)."
+      "cancel": "Annuleren",
+      "progress": "Uploadvoortgang",
+      "uploadFailedSome": "Deze bestanden konden niet worden geüpload: {names}",
+      "mode": {
+        "host": "De laatste upload is uitgevoerd door ANT-OS.",
+        "local": "De laatste upload is uitgevoerd door deze app (deze ANT-OS-versie kan niet namens de app uploaden)."
+      }
     },
     "triggers": {
       "tab": "Triggers",

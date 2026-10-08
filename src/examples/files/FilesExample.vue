@@ -8,7 +8,7 @@ import { useProjectFiles } from './useProjectFiles'
 
 const { i18n: { t } } = injectContext()
 const { projectId } = useGlobalStore()
-const { files, isLoading, uploading, canUpload, upload, preview } = useProjectFiles()
+const { files, isLoading, uploading, progress, lastMode, cancelUpload, canUpload, upload, preview } = useProjectFiles()
 
 const picked = ref<File[]>([])
 
@@ -34,8 +34,13 @@ async function submit() {
             hide-details
             :disabled="!canUpload || uploading"
           />
-          <v-btn type="submit" color="primary" :loading="uploading" :disabled="!canUpload || picked.length === 0" :text="t('examples.files.upload')" />
+          <v-btn v-if="uploading" variant="outlined" :text="t('examples.files.cancel')" @click="cancelUpload" />
+          <v-btn v-else type="submit" color="primary" :disabled="!canUpload || picked.length === 0" :text="t('examples.files.upload')" />
         </form>
+        <v-progress-linear v-if="uploading" :model-value="progress" color="primary" :aria-label="t('examples.files.progress')" />
+        <p v-if="lastMode" class="text-muted text-xs">
+          {{ t(`examples.files.mode.${lastMode}`) }}
+        </p>
 
         <v-list density="compact" border rounded>
           <v-list-item

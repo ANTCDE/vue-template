@@ -19,7 +19,7 @@ appear without reloading.
 ```mermaid
 flowchart LR
   I[Inspector] -->|new finding| R[(INSPECTION_FINDINGS<br/>app-declared table)]
-  I -->|photos| D[DMS: presigned upload]
+  I -->|photos| D[DMS: comms.uploadDmsFiles]
   D -->|file token| R
   R -->|severity = high| T[Task for role 'Site manager']
   D -->|linkDmsFileToTask| T
@@ -46,8 +46,11 @@ flowchart LR
 ```
 
 ```ts
-// 1. Upload the photo. Bytes go straight to storage; see files-dms.md and src/examples/files/
-const [photo] = await uploadToProjectRoot([file])   // getUploadUrls → PUT → uploadFilesFinish
+// 1. Upload the photo. The OS does the transfer; see files-dms.md and src/examples/files/
+const [result] = await comms.uploadDmsFiles([file], { scope: 'project', folderToken: photosFolder }).done
+if (result?.status !== 'done' || !result.file)
+  return notifications.error(t('inspection.photoFailed'))
+const photo = result.file
 
 // 2. Store the finding (tableId comes back from queryTables)
 await createRecord.execute(tableId, {

@@ -86,7 +86,13 @@
       "uploadFailed": "Hochladen fehlgeschlagen. Bitte erneut versuchen.",
       "empty": "Keine Dateien im Stammordner des Projekts.",
       "noUploadRight": "Sie können hier nicht hochladen: Sie benötigen Upload-Rechte in diesem Projekt, und das Projekt darf nicht archiviert sein.",
-      "storageBlocked": "Der Speicher hat den Upload von {origin} abgelehnt. Seine CORS-Richtlinie muss diesen Origin erlauben (nötig für lokale Entwicklung und selbst gehostete Apps)."
+      "cancel": "Abbrechen",
+      "progress": "Upload-Fortschritt",
+      "uploadFailedSome": "Diese Dateien konnten nicht hochgeladen werden: {names}",
+      "mode": {
+        "host": "Der letzte Upload wurde von ANT-OS ausgeführt.",
+        "local": "Der letzte Upload wurde von dieser App ausgeführt (diese ANT-OS-Version kann nicht für sie hochladen)."
+      }
     },
     "triggers": {
       "tab": "Trigger",

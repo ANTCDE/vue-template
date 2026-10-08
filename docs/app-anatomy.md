@@ -128,15 +128,15 @@ environment's own domain. Whether a request works depends on **which origin send
 | `comms.connect.*` API calls (the default) | The OS page | No. The OS makes the call; your origin is never involved |
 | `comms.request(...)` | The OS page | No |
 | Signals, context, toolbar, preview | `postMessage` | No |
-| DMS upload: the presigned `PUT` to Amazon S3 | Your app (`http://localhost:<port>`) | **Yes: the environment's S3 bucket CORS must allow your origin for `PUT`.** See [capabilities/files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin) |
+| DMS upload with `comms.uploadDmsFiles` | The OS page | No. The OS requests the URLs and makes the `PUT` to S3. See [capabilities/files-dms.md](capabilities/files-dms.md#uploading-files-commsuploaddmsfiles) |
+| A presigned `PUT` your app makes itself (direct path, or the SDK's fallback on an older ANT-OS) | Your app (`http://localhost:<port>`) | **Yes: S3 only allows the OS origin**, so the browser blocks it. See [the direct path](capabilities/files-dms.md#the-direct-presigned-path-still-supported) |
 | Direct API calls with your own token (`newAntConnect(newAntHttpClient(...))`) | Your app | **Yes: the API's CORS allowlist must contain your exact origin** |
 | Your own `fetch` to third-party services | Your app | Yes, governed by that service. Prefer a trigger (see [capabilities/triggers.md](capabilities/triggers.md)) |
 
-So with the default setup, the only thing that can hit CORS in developer mode is uploading files.
-That is exactly what happens against an environment whose S3 bucket doesn't list
-`http://localhost:*`: the browser blocks the `PUT` to `*.s3.<region>.amazonaws.com`, and
-everything except uploads keeps working. Uploads work again once the app is installed, or once the environment
-allows the origin.
+So with the default setup, nothing hits CORS in developer mode: uploads made with
+`comms.uploadDmsFiles` leave from the OS. Only a presigned `PUT` from your own frame does. That
+covers hand-rolled uploads, and the SDK's fallback when the ANT-OS you run against predates OS
+uploads (`mode: 'local'`). The browser blocks those from `http://localhost:<port>`.
 
 ### Declared tables don't exist in developer mode
 

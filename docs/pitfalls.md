@@ -110,44 +110,47 @@
     (`dms_files`, `projects`, …).
 
 37. **Upload fails from `/developer/<port>` (or a self-hosted app) with a CORS error, but works in
-    the installed app.** The presigned `PUT` goes from your origin straight to Amazon S3, and the
-    environment's S3 bucket CORS doesn't allow that origin (the console names an
-    `*.s3.<region>.amazonaws.com` URL). → An environment setting: the bucket needs a CORS rule
-    allowing your origin (e.g. `http://localhost:*`) for `PUT`, with headers `*` and exposed `ETag`.
-    Other API calls are unaffected, because they go through the OS.
-    [files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin)
+    the installed app.** The presigned `PUT` ran in your app's frame, and S3 only allows the OS
+    origin (the console names an `*.s3.<region>.amazonaws.com` URL). Two causes: the app uploads
+    by hand, or `comms.uploadDmsFiles` fell back because the ANT-OS you run against predates OS
+    uploads (`await upload.mode === 'local'`). → Use `comms.uploadDmsFiles`, against an ANT-OS that
+    supports it. [files-dms.md](capabilities/files-dms.md#uploading-files-commsuploaddmsfiles)
 
-38. **The S3 `PUT` returns 403.** The URL expired (it is valid for 300 s), or you added headers
-    that aren't signed, such as `x-amz-*`. → Request the URLs right before uploading; send only
-    `config.headers` minus `Host`.
-    [files-dms.md](capabilities/files-dms.md#uploading-from-your-own-origin)
+38. **`uploadDmsFiles` is missing at runtime although the types have it.** `@antcde/vue-utils` pins
+    its own `@antcde/connect-ts`, so an older `vue-utils` brings the old client along. → Bump
+    `connect-ts`, `vue-utils` and `component-library` together.
+
+39. **A hand-rolled S3 `PUT` returns 403.** The URL expired (it is valid for 300 s), or you added
+    headers that aren't signed, such as `x-amz-*`. → Prefer `comms.uploadDmsFiles`. If you must do
+    it yourself, request the URLs right before uploading and send only `config.headers` minus `Host`.
+    [files-dms.md](capabilities/files-dms.md#the-direct-presigned-path-still-supported)
 
 ## Triggers and Vault
 
-39. **Third-party API keys are stored in a table column, or provider tokens are minted in the
+40. **Third-party API keys are stored in a table column, or provider tokens are minted in the
     browser.** → Store credentials in the Vault, bind them to a trigger, and dispatch the
     trigger. The app never sees the credential. [vault.md](capabilities/vault.md)
-40. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
+41. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
     `useApi(connect.webhookTriggers.dispatch, null, { throwError: true })`.
-41. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
+42. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
     a successful (200) result, not an error. → Wrap the dispatch in `useTriggerDispatch(comms)`.
-42. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
+43. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
     `connect.webhookTriggers.dispatch`. It goes through the OS session and works with Vault
     bindings and consent.
 
 ## Build, tooling and tests
 
-43. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
+44. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
     cover only `vue`, `@vueuse/core`, `@vueuse/math`, `useDisplay` and `src/composables|stores|plugins`. →
     Import everything else explicitly.
-44. **Type-check fails on a fresh clone with unknown globals.** The generated
+45. **Type-check fails on a fresh clone with unknown globals.** The generated
     `auto-imports.d.ts` / `components.d.ts` don't exist yet. → Run `pnpm dev` or `pnpm build`
     once.
-45. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
+46. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
     and `CHANGELOG.md` disagree. → Bump all three together.
-46. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
+47. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
     `createAnt*` factories; pass overrides instead of replacing them.
-47. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
+48. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
     swallows errors even with `throwError: true`. → Assert on `api.error` / UI state, not on a
     thrown error. [testing.md](testing.md)
 

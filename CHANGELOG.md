@@ -12,15 +12,17 @@ the built app and shown in the ANT App Store.
 - `app-config.json` declares a real example table, a topic and a deep-link query parameter.
 - The app passes its manifest to ANT-OS on connect.
 - Theme follows the OS dark mode reliably (`isDark` instead of the raw colour mode).
-- SDK updated to `@antcde/connect-ts` 0.4.32, `@antcde/vue-utils` 0.2.27,
-  `@antcde/component-library` 0.1.30. TypeScript pinned to 6 (vue-tsc does not support 7 yet).
+- TypeScript pinned to 6 (vue-tsc does not support 7 yet).
 - `pnpm lint` passes again on a fresh clone.
 - Tables example: shows a clear "table not activated" state, with a "Create table for
   development" button, when its table doesn't exist yet (always the case at `/developer/<port>`).
 - Files example: upload is enabled for project and license admins (previously only users with an
   explicit upload grant), shows why it is disabled otherwise, and lists newest files first.
-- Files example: an upload refused by storage CORS (local dev server, self-hosted app) now says
-  so, instead of a generic failure.
+- Files example: uploads go through `comms.uploadDmsFiles`, so the OS performs the transfer and
+  uploading works from the developer URL and self-hosted apps too. It shows progress, can cancel,
+  reports per-file failures, and says whether the OS or the app performed the upload.
+- SDK requirement raised to `@antcde/connect-ts` ^0.4.33, `@antcde/vue-utils` ^0.2.28 and
+  `@antcde/component-library` ^0.1.31 (bumped together; `vue-utils` pins its `connect-ts`).
 
 ## 1.0.0
 

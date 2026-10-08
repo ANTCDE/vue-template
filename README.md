@@ -22,7 +22,7 @@ app has no host to talk to.
 | `shell/` | Context from the OS, toolbar, notifications, notepad, app state, navigation |
 | `tables/` | A table declared in `app-config.json`: paginated query, create/delete, permissions, deep link |
 | `tasks/` | Open tasks, opening them in the notepad, closing one, live updates |
-| `files/` | Project documents: list, presigned upload, OS preview, label filter |
+| `files/` | Project documents: list, upload through the OS (`comms.uploadDmsFiles`), OS preview, label filter |
 | `triggers/` | Running a server-side trigger; Vault credentials and OAuth consent handled by the OS |
 | `signals/` | App-to-app topics and split screen |
 

@@ -41,8 +41,9 @@ TypeScript, Vuetify 4, UnoCSS, Vite, Vitest, pnpm.
    file preview and workflows go through `comms.signal(...)`.
 8. **Clean up subscriptions.** Every `signal.receive()` / `signal.with().receive()` returns a
    stop function; call it in `onScopeDispose`. One subscription per collection, not per row.
-9. **Files never cross the iframe as `File`/`Blob`/`FormData`.** Upload with presigned URLs.
-   Preview with `signal({ openFilePreview })`.
+9. **Upload files with `comms.uploadDmsFiles`.** The OS does the transfer. Never pass files through
+   `connect` (JSON-cloned) and don't hand-roll the presigned `PUT`. Preview with
+   `signal({ openFilePreview })`.
 10. **Credentials never live in the app or in tables.** Store them in the Vault, bind them to
     a trigger, and dispatch the trigger.
 11. **UI conventions:** UnoCSS utilities with the ANT tokens (`bg-ant-surface`,
@@ -140,8 +141,8 @@ export function useThings() {
 - Deep links: read `context.initialRouteQuery` once at startup; write with `signal({ route })`.
 - Writes to a table need its **id**, not its name. Declared tables exist only after activation,
   so never in `/developer/<port>` mode: handle a missing table (see docs/app-anatomy.md).
-- In `/developer/<port>` mode only DMS uploads leave your origin (presigned PUT to storage). A CORS
-  error there is an environment setting, not a code bug (see docs/capabilities/files-dms.md).
+- Uploads: `comms.uploadDmsFiles` works from any origin. A CORS error on an S3 `PUT` means the
+  upload ran in your frame: hand-rolled, or the SDK fell back on an older ANT-OS (`mode: 'local'`).
 - Gate writes with `usePermissions` (`isProjectAdmin` or the grant). `user_permissions` alone
   misses admins.
 - `.with()` subscriptions are bound to the project at subscribe time: re-subscribe on switch.
