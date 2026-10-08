@@ -8,7 +8,7 @@ import { useProjectFiles } from './useProjectFiles'
 
 const { i18n: { t } } = injectContext()
 const { projectId } = useGlobalStore()
-const { files, isLoading, uploading, progress, lastMode, cancelUpload, canUpload, upload, preview } = useProjectFiles()
+const { files, isLoading, uploading, progress, lastMode, lastError, cancelUpload, canUpload, upload, preview } = useProjectFiles()
 
 const picked = ref<File[]>([])
 
@@ -41,6 +41,9 @@ async function submit() {
         <p v-if="lastMode" class="text-muted text-xs">
           {{ t(`examples.files.mode.${lastMode}`) }}
         </p>
+        <v-alert v-if="lastError" type="error" variant="tonal" density="compact" :title="t('examples.files.errorTitle')">
+          <pre class="whitespace-pre-wrap text-xs">{{ lastError }}</pre>
+        </v-alert>
 
         <v-list density="compact" border rounded>
           <v-list-item

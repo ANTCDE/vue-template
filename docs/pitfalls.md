@@ -116,9 +116,12 @@
     uploads (`await upload.mode === 'local'`). → Use `comms.uploadDmsFiles`, against an ANT-OS that
     supports it. [files-dms.md](capabilities/files-dms.md#uploading-files-commsuploaddmsfiles)
 
-38. **`uploadDmsFiles` is missing at runtime although the types have it.** `@antcde/vue-utils` pins
-    its own `@antcde/connect-ts`, so an older `vue-utils` brings the old client along. → Bump
-    `connect-ts`, `vue-utils` and `component-library` together.
+38. **`uploadDmsFiles` is missing at runtime although the types have it** (the template's Files
+    tab says the SDK has no OS upload). Two causes. First, `@antcde/vue-utils` pins its own
+    `@antcde/connect-ts`, so an older `vue-utils` brings the old client along. Second, after an SDK
+    change, a running `pnpm dev` keeps serving the copy it pre-bundled at startup
+    (`node_modules/.vite/deps`). → Bump `connect-ts`, `vue-utils` and `component-library` together,
+    and restart the dev server with `pnpm dev --force`.
 
 39. **A hand-rolled S3 `PUT` returns 403.** The URL expired (it is valid for 300 s), or you added
     headers that aren't signed, such as `x-amz-*`. → Prefer `comms.uploadDmsFiles`. If you must do

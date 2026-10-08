@@ -18,6 +18,8 @@ export function useProjectFiles() {
   const progress = ref(0)
   // 'host': the OS did the transfer. 'local': an older OS without it, so this frame did.
   const lastMode = ref<'host' | 'local' | null>(null)
+  // Shown on screen, so a failed upload can be diagnosed without DevTools.
+  const lastError = ref<string | null>(null)
   let current: DmsUploadHandle | null = null
 
   // The OS label bar filters every app that opts in. Only apply it when the user
@@ -47,6 +49,15 @@ export function useProjectFiles() {
   async function upload(selected: File[]) {
     if (!projectId.value || selected.length === 0)
       return
+    lastError.value = null
+    lastMode.value = null
+    // An app bundled with an SDK older than OS uploads (or a dev server still serving its old
+    // pre-bundled copy) has no such method.
+    if (typeof comms.uploadDmsFiles !== 'function') {
+      lastError.value = t('examples.files.sdkTooOld')
+      notifications.error(lastError.value)
+      return
+    }
     uploading.value = true
     progress.value = 0
     const total = selected.reduce((sum, file) => sum + file.size, 0)
@@ -68,12 +79,19 @@ export function useProjectFiles() {
       const failed = results.filter(result => result.status === 'error')
       if (done.length)
         notifications.success(t('examples.files.uploaded', { count: done.length }))
-      if (failed.length)
+      if (failed.length) {
+        // Per-file errors happen in the OS (upload URLs refused, storage 403, finish failed); the
+        // message is all that crosses back, so show it.
+        lastError.value = failed.map(result => `${result.filename}: ${result.error ?? '?'}`).join('\n')
+        console.error('[files] upload failed', { mode: lastMode.value, failed })
         notifications.error(t('examples.files.uploadFailedSome', { names: failed.map(result => result.filename).join(', ') }))
+      }
     }
-    catch {
-      // Nothing could start: no project in context, or the project is archived.
-      notifications.error(t('examples.files.uploadFailed'))
+    catch (error) {
+      // Nothing could start, e.g. DMS_UPLOAD_NO_SCOPE or DMS_UPLOAD_READ_ONLY from the OS.
+      lastError.value = error instanceof Error ? error.message : String(error)
+      console.error('[files] upload could not start', { mode: lastMode.value, error })
+      notifications.error(t('examples.files.uploadFailedReason', { reason: lastError.value }))
     }
     finally {
       current = null
@@ -120,6 +138,7 @@ export function useProjectFiles() {
     uploading,
     progress,
     lastMode,
+    lastError,
     cancelUpload,
     canUpload,
     upload,

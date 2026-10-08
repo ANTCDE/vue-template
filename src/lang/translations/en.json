@@ -83,7 +83,6 @@
       "pick": "Choose files",
       "upload": "Upload",
       "uploaded": "{count} file(s) uploaded.",
-      "uploadFailed": "Upload failed. Please try again.",
       "empty": "No files in the project root.",
       "noUploadRight": "You can't upload here: you need upload rights in this project, and the project must not be archived.",
       "cancel": "Cancel",
@@ -92,7 +91,10 @@
       "mode": {
         "host": "Last upload was performed by ANT-OS.",
         "local": "Last upload was performed by this app (this ANT-OS version can't upload on its behalf)."
-      }
+      },
+      "uploadFailedReason": "Upload could not start: {reason}",
+      "errorTitle": "Upload error",
+      "sdkTooOld": "This app's ANT SDK has no OS upload (comms.uploadDmsFiles). Update {'@'}antcde/connect-ts and {'@'}antcde/vue-utils together; in development, restart the dev server with `pnpm dev --force` so it drops its cached copy."
     },
     "triggers": {
       "tab": "Triggers",

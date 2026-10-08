@@ -83,7 +83,6 @@
       "pick": "Kies bestanden",
       "upload": "Uploaden",
       "uploaded": "{count} bestand(en) geüpload.",
-      "uploadFailed": "Uploaden mislukt. Probeer het opnieuw.",
       "empty": "Geen bestanden in de hoofdmap van het project.",
       "noUploadRight": "Je kunt hier niet uploaden: je hebt uploadrechten in dit project nodig en het project mag niet gearchiveerd zijn.",
       "cancel": "Annuleren",
@@ -92,7 +91,10 @@
       "mode": {
         "host": "De laatste upload is uitgevoerd door ANT-OS.",
         "local": "De laatste upload is uitgevoerd door deze app (deze ANT-OS-versie kan niet namens de app uploaden)."
-      }
+      },
+      "uploadFailedReason": "Upload kon niet starten: {reason}",
+      "errorTitle": "Uploadfout",
+      "sdkTooOld": "De ANT SDK van deze app heeft geen OS-upload (comms.uploadDmsFiles). Werk {'@'}antcde/connect-ts en {'@'}antcde/vue-utils samen bij; herstart tijdens ontwikkeling de dev-server met `pnpm dev --force` zodat de gecachte kopie verdwijnt."
     },
     "triggers": {
       "tab": "Triggers",

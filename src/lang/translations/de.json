@@ -83,7 +83,6 @@
       "pick": "Dateien wählen",
       "upload": "Hochladen",
       "uploaded": "{count} Datei(en) hochgeladen.",
-      "uploadFailed": "Hochladen fehlgeschlagen. Bitte erneut versuchen.",
       "empty": "Keine Dateien im Stammordner des Projekts.",
       "noUploadRight": "Sie können hier nicht hochladen: Sie benötigen Upload-Rechte in diesem Projekt, und das Projekt darf nicht archiviert sein.",
       "cancel": "Abbrechen",
@@ -92,7 +91,10 @@
       "mode": {
         "host": "Der letzte Upload wurde von ANT-OS ausgeführt.",
         "local": "Der letzte Upload wurde von dieser App ausgeführt (diese ANT-OS-Version kann nicht für sie hochladen)."
-      }
+      },
+      "uploadFailedReason": "Upload konnte nicht starten: {reason}",
+      "errorTitle": "Upload-Fehler",
+      "sdkTooOld": "Das ANT SDK dieser App hat keinen OS-Upload (comms.uploadDmsFiles). Aktualisieren Sie {'@'}antcde/connect-ts und {'@'}antcde/vue-utils gemeinsam; starten Sie in der Entwicklung den Dev-Server mit `pnpm dev --force` neu, damit die zwischengespeicherte Kopie verworfen wird."
     },
     "triggers": {
       "tab": "Trigger",
