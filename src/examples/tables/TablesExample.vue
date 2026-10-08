@@ -9,7 +9,7 @@ import { NOTES_TABLE, useNotes } from './useNotes'
 
 const { comms: { context, signal }, i18n: { t } } = injectContext()
 const { projectId } = useGlobalStore()
-const { notes, total, page, pageCount, isLoading, canCreate, canDelete, create, remove } = useNotes()
+const { state, notes, total, page, pageCount, isLoading, creatingTable, canCreate, canDelete, canCreateTable, create, remove, createTableForDevelopment } = useNotes()
 
 const newTitle = ref('')
 
@@ -41,7 +41,27 @@ function select(note: Note) {
     >
       <ScopeNotice v-if="!projectId" needs="project" />
 
-      <template v-else>
+      <!-- Declared tables exist only after the app is activated in the project. -->
+      <v-alert
+        v-else-if="state === 'missing'"
+        type="warning"
+        variant="tonal"
+        :title="t('examples.tables.missingTitle', { table: NOTES_TABLE })"
+      >
+        <p class="text-sm">
+          {{ t('examples.tables.missingText') }}
+        </p>
+        <v-btn
+          v-if="canCreateTable"
+          class="mt-3"
+          variant="outlined"
+          :loading="creatingTable"
+          :text="t('examples.tables.createForDevelopment')"
+          @click="createTableForDevelopment"
+        />
+      </v-alert>
+
+      <template v-else-if="state === 'ready'">
         <form class="flex gap-2" @submit.prevent="submit">
           <v-text-field
             v-model="newTitle"
@@ -81,6 +101,8 @@ function select(note: Note) {
           <v-pagination v-model="page" :length="pageCount" density="compact" total-visible="5" />
         </div>
       </template>
+
+      <v-progress-linear v-else indeterminate color="primary" :aria-label="t('examples.common.loading')" />
     </ExampleSection>
   </div>
 </template>

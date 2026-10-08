@@ -12,7 +12,8 @@
       "needs": {
         "license": "Selecteer een licentie in ANT-OS om verder te gaan.",
         "project": "Selecteer een project in ANT-OS om verder te gaan."
-      }
+      },
+      "loading": "Laden…"
     },
     "shell": {
       "tab": "Shell",
@@ -60,7 +61,11 @@
       "delete": "Notitie {title} verwijderen",
       "empty": "Nog geen notities.",
       "total": "{count} notities",
-      "created": "Notitie toegevoegd."
+      "created": "Notitie toegevoegd.",
+      "missingTitle": "Tabel {table} bestaat nog niet in dit project",
+      "missingText": "Tabellen uit app-config.json worden aangemaakt wanneer de app in een project wordt geactiveerd. Een app die via de developer-URL is geopend, is nooit geactiveerd, dus de tabellen bestaan pas als je hier een gepubliceerde versie activeert, of de tabel aanmaakt voor ontwikkeling (activatie neemt die later over).",
+      "createForDevelopment": "Tabel aanmaken voor ontwikkeling",
+      "tableCreated": "Tabel aangemaakt."
     },
     "tasks": {
       "tab": "Taken",
@@ -79,7 +84,8 @@
       "upload": "Uploaden",
       "uploaded": "{count} bestand(en) geüpload.",
       "uploadFailed": "Uploaden mislukt. Probeer het opnieuw.",
-      "empty": "Geen bestanden in de hoofdmap van het project."
+      "empty": "Geen bestanden in de hoofdmap van het project.",
+      "noUploadRight": "Je kunt hier niet uploaden: je hebt uploadrechten in dit project nodig en het project mag niet gearchiveerd zijn."
     },
     "triggers": {
       "tab": "Triggers",

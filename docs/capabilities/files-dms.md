@@ -20,8 +20,11 @@
   Choose the pair once, based on whether a project is selected.
 - **Permissions.**
   - Every file has `permissions['dms.read' | 'dms.upload' | 'dms.delete' | 'dms.configure']`.
-  - At the root, permissions come from `context.project.user_permissions['dms.*']`, or at license level from
-    `context.license.user_permissions['dms.license.*']`.
+  - At the root there is no item to read permissions from. Upload is allowed for project or license
+    admins (`usePermissions(context).isProjectAdmin`), or with the `dms.upload` grant in
+    `context.project.user_permissions`. At license level it's `isLicenseAdmin` or
+    `context.license.user_permissions['dms.license.upload']`. **Don't check `user_permissions`
+    alone**: it holds role grants only, so admins without a role see `false` there.
   - A folder's permissions apply **inside** that folder. To rename or move a folder, check the permissions of its
     **parent**.
 - **Why presigned uploads.** `connect` calls cross the iframe boundary as cloned JSON, so `File`, `Blob` and

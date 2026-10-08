@@ -24,6 +24,7 @@ async function submit() {
       <ScopeNotice v-if="!projectId" needs="project" />
 
       <template v-else>
+        <v-alert v-if="!canUpload" type="info" variant="tonal" density="compact" :text="t('examples.files.noUploadRight')" />
         <form class="flex gap-2" @submit.prevent="submit">
           <v-file-input
             v-model="picked"

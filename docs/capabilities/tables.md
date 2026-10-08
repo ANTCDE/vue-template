@@ -18,8 +18,13 @@
 
 ## Rules
 
-- Query by **name** with `project` (or `license`) set, and keep the returned `id` for writes.
-  `createRecord`, `updateRecord` and the other write methods take the table id, not the name.
+- Find the table by **name** first (`tables.getTables(projectId)` / `getLicenseTables(licenseId)`),
+  and keep its `id`. Writes (`createRecord`, `updateRecord`, …) take the id, not the name.
+- **Handle a missing table.** A declared table exists only where the app was activated, and never
+  during local development at `/developer/<port>`. Querying a name that doesn't exist is an API
+  error, with an OS error toast. Check the lookup instead, and show a clear "not activated" state.
+  See `src/examples/tables/useNotes.ts` and
+  [../app-anatomy.md](../app-anatomy.md#declared-tables-dont-exist-in-developer-mode).
 - Always give a query an `as` alias. The response is keyed by that alias.
 - Paginate with `limit` + `offset` and show the total from `stats.count`. Never load a whole table to count it,
   filter it or aggregate it in the browser.

@@ -12,6 +12,8 @@
   - `context.value.project.user_permissions` and `.user_is_admin`
 
   Both permission maps are `Record<permissionName, boolean>`. Roles are listed in `user_roles`.
+  **The maps hold role grants only.** An admin without a role sees `false` in them, so never check
+  `user_permissions` directly. Use the `usePermissions` helpers below, which add the admin rights.
 - **Global admin.** `context.value.user.is_admin` marks a platform administrator.
 - **Admin bypass.** These are the rules in `usePermissions` (published `@antcde/vue-utils`):
   - A global admin or a license admin passes every `hasLicense*` and `hasProjectPermission` check.

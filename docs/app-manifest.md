@@ -70,7 +70,13 @@ The schema is lenient on purpose: unknown keys are allowed and not used. Stick t
 **What activation does.** Tables are created when a license activates the app in a project
 (project tables) or for the license (license tables). Activating a new version **creates and
 updates columns but never drops them**. A column you remove from the manifest keeps existing
-with its data, so plan renames as "add new, migrate, stop using old".
+with its data, so plan renames as "add new, migrate, stop using old". If the project already
+has a table with the declared name, activation **adopts** it: it adds missing columns and updates
+`required`, `is_unique` and `hint` on existing ones.
+
+**Local development.** An app opened from `/developer/<port>` is never activated, so its declared
+tables don't exist yet. See [app-anatomy.md](app-anatomy.md#declared-tables-dont-exist-in-developer-mode)
+for the two ways to get them.
 
 **Shared tables.** Several apps may declare the same table name. They then simply work on the
 same data, which is a legitimate way for apps to share a dataset. Keep their column

@@ -8,14 +8,13 @@ import { useGlobalStore } from '@/stores/app.store'
 /** The project's DMS root: list, upload, preview. See docs/capabilities/files-dms.md. */
 export function useProjectFiles() {
   const { comms: { connect, context, signal, notifications }, i18n: { t } } = injectContext()
-  const { licenseId, projectId, projectReadOnly } = useGlobalStore()
+  const { licenseId, projectId, projectReadOnly, permissions } = useGlobalStore()
 
   const listApi = useApi(connect.dms.getProjectFiles, null)
   const urlsApi = useApi(connect.dms.getUploadUrls, null)
   const finishApi = useApi(connect.dms.uploadFilesFinish, [])
 
   const files = shallowRef<DmsFile[]>([])
-  const rootUploadAllowed = ref(false)
   const uploading = ref(false)
 
   // The OS label bar filters every app that opts in. Only apply it when the user
@@ -27,12 +26,17 @@ export function useProjectFiles() {
     return { label_ids: selected.labels, label_operator: selected.operator }
   })
 
+  // Root upload right: project or license admin (isProjectAdmin covers both), or a `dms.upload`
+  // grant. `user_permissions` alone is not enough: it holds role grants only, not admin rights.
+  // Inside a folder, use that folder's own `permissions` instead.
+  const canUpload = computed(() => !projectReadOnly.value
+    && (permissions.isProjectAdmin.value || !!context.value.project?.user_permissions?.['dms.upload']))
+
   async function load() {
     if (!projectId.value)
       return
-    const result = await listApi.execute(projectId.value, { per_page: 25, sort_by: 'name', sort_dir: 'asc', ...labelFilter.value })
+    const result = await listApi.execute(projectId.value, { per_page: 25, sort_by: 'updated_at', sort_dir: 'desc', ...labelFilter.value })
     files.value = (result?.data ?? []).filter(file => !file.is_folder)
-    rootUploadAllowed.value = !!context.value.project?.user_permissions?.['dms.upload'] || !!context.value.project?.user_is_admin
   }
 
   /**
@@ -105,7 +109,7 @@ export function useProjectFiles() {
     files,
     isLoading: listApi.isLoading,
     uploading,
-    canUpload: computed(() => rootUploadAllowed.value && !projectReadOnly.value),
+    canUpload,
     upload,
     preview,
   }

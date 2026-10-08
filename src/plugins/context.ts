@@ -6,7 +6,7 @@
  */
 import type { UseAntColorModeReturn, UseAntI18nReturn, UseCommsClient } from '@antcde/vue-utils'
 import { useAntColorMode, useAntI18n, useCommsClient, useSingleton } from '@antcde/vue-utils'
-import rawManifest from '../../app-config.json?raw'
+import { manifest } from '@/manifest'
 
 export interface Context {
   comms: UseCommsClient
@@ -20,7 +20,7 @@ export const [provideContext, injectContext] = useSingleton<Context>(
   () => {
     // No `connect` argument: every connect.* call is proxied through the OS, which holds the
     // session. The app never sees a token. See docs/calling-the-api.md.
-    const comms = useCommsClient(undefined, undefined, JSON.parse(rawManifest))
+    const comms = useCommsClient(undefined, undefined, manifest)
     const colorMode = useAntColorMode(comms)
     const i18n = useAntI18n(comms)
 

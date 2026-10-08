@@ -138,7 +138,10 @@ export function useThings() {
 - `context.task` is deprecated: use `selectedTask` or `notepadTask`.
 - Theme from `colorMode.isDark`, not from the raw mode (`'auto'`).
 - Deep links: read `context.initialRouteQuery` once at startup; write with `signal({ route })`.
-- Writes to a table need its **id** (from the query response), not its name.
+- Writes to a table need its **id**, not its name. Declared tables exist only after activation,
+  so never in `/developer/<port>` mode: handle a missing table (see docs/app-anatomy.md).
+- Gate writes with `usePermissions` (`isProjectAdmin` or the grant). `user_permissions` alone
+  misses admins.
 - `.with()` subscriptions are bound to the project at subscribe time: re-subscribe on switch.
 - `connect.triggers` / `connect.vault` / `connect.files` don't exist: use
   `webhookTriggers`, `secrets`, `dms`.

@@ -88,44 +88,53 @@
 30. **The query result is silently cut off.** The result was truncated at a limit. → Paginate
     with `limit`/`offset` and compare with `stats.count`.
 
+31. **The app's own table "doesn't exist" when running from `/developer/<port>`.** The developer
+    URL never activates the app, so declared tables were never created. → Create the table for
+    development, or activate a published version once; activation adopts it later. Handle the
+    missing state in code. [app-anatomy.md](app-anatomy.md#declared-tables-dont-exist-in-developer-mode)
+
 ## Files
 
-31. **The preview shows a download, or raw bytes.** `fileName` lacks the extension. → Send
+32. **The preview shows a download, or raw bytes.** `fileName` lacks the extension. → Send
     `fileName` as `name.extension` plus `fileExtension`.
-32. **Rename or move is refused although the user can edit the file.** Folder permissions apply
+33. **Rename or move is refused although the user can edit the file.** Folder permissions apply
     *inside* the folder. → Check the parent folder's permissions for rename/move.
-33. **The app downloads and renders files itself.** → `signal({ openFilePreview })`; the OS
+34. **The app downloads and renders files itself.** → `signal({ openFilePreview })`; the OS
     resolves signed URLs and handles formats.
-34. **The label filter is ignored, or applied when it shouldn't be.** → Apply
+35. **Upload (or another write) is disabled for an admin.** The gate reads
+    `project.user_permissions` only. Those maps hold role grants, not admin rights. → Gate on
+    `usePermissions(context).isProjectAdmin` **or** the grant.
+
+36. **The label filter is ignored, or applied when it shouldn't be.** → Apply
     `context.selectedLabels` only when its `resources` includes your resource type
     (`dms_files`, `projects`, …).
 
 ## Triggers and Vault
 
-35. **Third-party API keys are stored in a table column, or provider tokens are minted in the
+37. **Third-party API keys are stored in a table column, or provider tokens are minted in the
     browser.** → Store credentials in the Vault, bind them to a trigger, and dispatch the
     trigger. The app never sees the credential. [vault.md](capabilities/vault.md)
-36. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
+38. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
     `useApi(connect.webhookTriggers.dispatch, null, { throwError: true })`.
-37. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
+39. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
     a successful (200) result, not an error. → Wrap the dispatch in `useTriggerDispatch(comms)`.
-38. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
+40. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
     `connect.webhookTriggers.dispatch`. It goes through the OS session and works with Vault
     bindings and consent.
 
 ## Build, tooling and tests
 
-39. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
+41. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
     cover only `vue`, `@vueuse/core`, `@vueuse/math`, `useDisplay` and `src/composables|stores|plugins`. →
     Import everything else explicitly.
-40. **Type-check fails on a fresh clone with unknown globals.** The generated
+42. **Type-check fails on a fresh clone with unknown globals.** The generated
     `auto-imports.d.ts` / `components.d.ts` don't exist yet. → Run `pnpm dev` or `pnpm build`
     once.
-41. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
+43. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
     and `CHANGELOG.md` disagree. → Bump all three together.
-42. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
+44. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
     `createAnt*` factories; pass overrides instead of replacing them.
-43. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
+45. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
     swallows errors even with `throwError: true`. → Assert on `api.error` / UI state, not on a
     thrown error. [testing.md](testing.md)
 

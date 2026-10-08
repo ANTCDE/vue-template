@@ -15,6 +15,10 @@ the built app and shown in the ANT App Store.
 - SDK updated to `@antcde/connect-ts` 0.4.32, `@antcde/vue-utils` 0.2.27,
   `@antcde/component-library` 0.1.30. TypeScript pinned to 6 (vue-tsc does not support 7 yet).
 - `pnpm lint` passes again on a fresh clone.
+- Tables example: shows a clear "table not activated" state, with a "Create table for
+  development" button, when its table doesn't exist yet (always the case at `/developer/<port>`).
+- Files example: upload is enabled for project and license admins (previously only users with an
+  explicit upload grant), shows why it is disabled otherwise, and lists newest files first.
 
 ## 1.0.0
 

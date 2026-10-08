@@ -12,7 +12,8 @@
       "needs": {
         "license": "Select a license in ANT-OS to continue.",
         "project": "Select a project in ANT-OS to continue."
-      }
+      },
+      "loading": "Loading…"
     },
     "shell": {
       "tab": "Shell",
@@ -60,7 +61,11 @@
       "delete": "Delete note {title}",
       "empty": "No notes yet.",
       "total": "{count} notes",
-      "created": "Note added."
+      "created": "Note added.",
+      "missingTitle": "Table {table} doesn't exist in this project yet",
+      "missingText": "Tables declared in app-config.json are created when the app is activated in a project. An app opened from the developer URL is never activated, so its tables don't exist until you activate a published version here, or create the table for development (activation adopts it later).",
+      "createForDevelopment": "Create table for development",
+      "tableCreated": "Table created."
     },
     "tasks": {
       "tab": "Tasks",
@@ -79,7 +84,8 @@
       "upload": "Upload",
       "uploaded": "{count} file(s) uploaded.",
       "uploadFailed": "Upload failed. Please try again.",
-      "empty": "No files in the project root."
+      "empty": "No files in the project root.",
+      "noUploadRight": "You can't upload here: you need upload rights in this project, and the project must not be archived."
     },
     "triggers": {
       "tab": "Triggers",

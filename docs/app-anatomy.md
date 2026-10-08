@@ -118,6 +118,27 @@ with your real session, context and realtime. For another port use `/developer/<
 Opened directly at `http://localhost:5174`, outside the OS, the app has no host: comms never
 connects and API calls fail. Always develop inside the OS.
 
+### Declared tables don't exist in developer mode
+
+The developer URL loads your code, but the app is **not installed or activated**. So nothing in
+`app-config.json` has been applied: the tables you declare don't exist in the project yet, and
+querying them fails. To get them while developing:
+
+- **Create them for development.** The Tables example shows a "Create table for development"
+  button when its table is missing. It calls `connect.tables.createTable` with the columns from
+  `app-config.json`; see `createTableForDevelopment` in `src/examples/tables/useNotes.ts`. You need
+  `tables.configure` or project admin rights. You can also create the table by hand in the OS's
+  tables app, with the same name and columns.
+- **Or activate a real version once.** Upload a build to the App Store, install it on your license
+  and activate it in your development project. That creates every declared table. You can keep
+  using `/developer/<port>` for the code afterwards.
+
+Either way works: activation **adopts** an existing table with the same name and adds or updates
+its declared columns, so a table you created during development is taken over by the first real
+activation. Your code should still handle a missing table, because a project where the app was
+never activated looks exactly like this. Look the table up by name first and show a clear state
+instead of failing (see [capabilities/tables.md](capabilities/tables.md)).
+
 ## Scripts
 
 | Command | Does |

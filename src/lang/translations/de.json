@@ -12,7 +12,8 @@
       "needs": {
         "license": "Wählen Sie in ANT-OS eine Lizenz, um fortzufahren.",
         "project": "Wählen Sie in ANT-OS ein Projekt, um fortzufahren."
-      }
+      },
+      "loading": "Wird geladen…"
     },
     "shell": {
       "tab": "Shell",
@@ -60,7 +61,11 @@
       "delete": "Notiz {title} löschen",
       "empty": "Noch keine Notizen.",
       "total": "{count} Notizen",
-      "created": "Notiz hinzugefügt."
+      "created": "Notiz hinzugefügt.",
+      "missingTitle": "Tabelle {table} existiert in diesem Projekt noch nicht",
+      "missingText": "In app-config.json deklarierte Tabellen werden angelegt, wenn die App in einem Projekt aktiviert wird. Eine über die Developer-URL geöffnete App ist nie aktiviert, daher existieren ihre Tabellen erst, wenn Sie hier eine veröffentlichte Version aktivieren oder die Tabelle für die Entwicklung anlegen (die Aktivierung übernimmt sie später).",
+      "createForDevelopment": "Tabelle für die Entwicklung anlegen",
+      "tableCreated": "Tabelle angelegt."
     },
     "tasks": {
       "tab": "Aufgaben",
@@ -79,7 +84,8 @@
       "upload": "Hochladen",
       "uploaded": "{count} Datei(en) hochgeladen.",
       "uploadFailed": "Hochladen fehlgeschlagen. Bitte erneut versuchen.",
-      "empty": "Keine Dateien im Stammordner des Projekts."
+      "empty": "Keine Dateien im Stammordner des Projekts.",
+      "noUploadRight": "Sie können hier nicht hochladen: Sie benötigen Upload-Rechte in diesem Projekt, und das Projekt darf nicht archiviert sein."
     },
     "triggers": {
       "tab": "Trigger",
