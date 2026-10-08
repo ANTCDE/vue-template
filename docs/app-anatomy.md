@@ -112,7 +112,8 @@ pnpm install
 pnpm dev            # serves on http://localhost:5174
 ```
 
-Open ANT-OS and go to **`/developer/5174`**. The OS loads `http://localhost:5174` in an iframe,
+Open ANT-OS and go to **`/developer/5174`**. The dev script uses `--strictPort`: if 5174 is taken it fails instead of
+silently moving to another port, which would leave `/developer/5174` showing an old server. The OS loads `http://localhost:5174` in an iframe,
 with your real session, context and realtime. For another port use `/developer/<port>`.
 
 Opened directly at `http://localhost:5174`, outside the OS, the app has no host: comms never

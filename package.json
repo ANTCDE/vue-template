@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "private": false,
   "scripts": {
-    "dev": "vite --port 5174",
+    "dev": "vite --port 5174 --strictPort",
     "build": "pnpm clear && vite build && pnpm copy && pnpm zip",
     "copy": "pnpm copy-config && pnpm copy-readme && pnpm copy-changelog",
     "copy-config": "pnpm dlx shx cp app-config.json ./dist/app-config.json",
