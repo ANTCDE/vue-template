@@ -94,7 +94,11 @@
       },
       "uploadFailedReason": "Upload kon niet starten: {reason}",
       "errorTitle": "Uploadfout",
-      "sdkTooOld": "De ANT SDK van deze app heeft geen OS-upload (comms.uploadDmsFiles). Werk {'@'}antcde/connect-ts en {'@'}antcde/vue-utils samen bij; herstart tijdens ontwikkeling de dev-server met `pnpm dev --force` zodat de gecachte kopie verdwijnt."
+      "sdkTooOld": "De ANT SDK van deze app heeft geen OS-upload (comms.uploadDmsFiles). Werk {'@'}antcde/connect-ts en {'@'}antcde/vue-utils samen bij; herstart tijdens ontwikkeling de dev-server met `pnpm dev --force` zodat de gecachte kopie verdwijnt.",
+      "hint": {
+        "host": "Uitgevoerd door ANT-OS: de reden van de browser staat in de console van het ANT-OS-tabblad (context 'top'), niet in het frame van deze app.",
+        "local": "Uitgevoerd door het frame van deze app ({origin}): deze ANT-OS kan niet namens de app uploaden, dus de CORS van de opslag geldt voor {origin}. De reden van de browser staat in de console van dit frame."
+      }
     },
     "triggers": {
       "tab": "Triggers",

@@ -82,7 +82,9 @@ export function useProjectFiles() {
       if (failed.length) {
         // Per-file errors happen in the OS (upload URLs refused, storage 403, finish failed); the
         // message is all that crosses back, so show it.
-        lastError.value = failed.map(result => `${result.filename}: ${result.error ?? '?'}`).join('\n')
+        // Which page made the PUT decides whose console holds the browser's reason (CORS, CSP, …).
+        const hint = t(lastMode.value === 'host' ? 'examples.files.hint.host' : 'examples.files.hint.local', { origin: window.location.origin })
+        lastError.value = [...failed.map(result => `${result.filename}: ${result.error ?? '?'}`), '', hint].join('\n')
         console.error('[files] upload failed', { mode: lastMode.value, failed })
         notifications.error(t('examples.files.uploadFailedSome', { names: failed.map(result => result.filename).join(', ') }))
       }
