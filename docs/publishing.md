@@ -17,6 +17,13 @@
 - **To publish, you need an ANT license of your own.** External parties get their own ANT license, and
   that license lets them publish apps.
 
+## Canonical pattern: a release
+
+1. Bump `version` in `package.json` **and** `app-config.json` to the same number.
+2. Add a `CHANGELOG.md` entry for that version, written for your users.
+3. `pnpm build`, then check that `dist/app.zip` contains `app-config.json`, `README.md` and `CHANGELOG.md`.
+4. Upload `dist/app.zip` as a new version in the App Store, and release it on a channel.
+
 ## Local development
 
 ```bash

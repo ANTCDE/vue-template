@@ -91,6 +91,9 @@ Filter syntax for `buildTaskQuery`:
   For example `q: 'assignee = currentUser() AND status = open AND due < today() ORDER BY due'`,
   next to `filters: { project: { $eq: projectId } }`. `tasks.getTaskQueryFields(licenseId)` returns
   the fields it knows.
+  - `q` and `filters` both apply: the result matches **both**.
+  - `ORDER BY due` sorts ascending; add `DESC` to reverse. Tasks without a due date always come last.
+  - `due < today()` excludes tasks due today; use `<=` to include them.
 
 **Who may change a task.** Add `canUpdate` to `include`; each row then carries `can_update`. Disable
 edit and close controls where it is `false` (`src/examples/tasks/` does this). Anyone allowed to

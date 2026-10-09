@@ -42,7 +42,7 @@ docs/                      Platform documentation (you are here)
 AGENTS.md / CLAUDE.md      Entry point for AI coding assistants
 ```
 
-## The bootstrap (keep it exactly like this)
+## Canonical pattern: the bootstrap (keep it exactly like this)
 
 `src/plugins/context.ts` creates one app-wide context:
 

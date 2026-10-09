@@ -163,7 +163,8 @@ export function useThings() {
 - **SDK versions on this branch.** `package.json` asks for `@antcde/connect-ts` ^0.4.33,
   `@antcde/vue-utils` ^0.2.28 and `@antcde/component-library` ^0.1.31, which reach npm with the next
   stable SDK release. Until then, install with the release candidates, as described in
-  [README.md](README.md#installing-before-the-stable-sdk).
+  [README.md](README.md#installing-before-the-stable-sdk). That edit to `pnpm-workspace.yaml` is
+  local: never stage it (`git add -- . ':!pnpm-workspace.yaml'`).
 
 ## Verify your work
 

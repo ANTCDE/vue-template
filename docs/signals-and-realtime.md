@@ -150,6 +150,21 @@ The OS re-broadcasts change keys and `resource` signals to every other app loade
 browser tab. Other users get the change from the server, through the realtime channels above.
 Documents need no broadcast: the server pushes `dmsFile` events to everyone, including you.
 
+## Sharing a selection
+
+When the user picks a **platform object** (a project, a task, an SBS code), don't invent a topic. Change
+the OS selection, and every open app sees it in its context:
+
+```ts
+signal({ select: { task: task.id } })      // → context.selectedTask in every app
+notepad.showTask({ id: task.id }, true)    // open it in the notepad and select it
+signal({ select: { sbs: 'B01.02' } })      // → context.sbs
+```
+
+A planning app that highlights "the selected task" just watches `context.selectedTask`, and no
+topic name needs to be agreed. Use **topics** for app-specific events that have no place in the OS
+context, such as "note 42 selected" or "filter changed".
+
 ## Topics: app-to-app messages
 
 Topics are named pub/sub channels between apps, for example "the user picked note 42". Declare

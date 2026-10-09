@@ -9,6 +9,10 @@
 passing. Add tests where behaviour is worth guarding: pure helpers (parsing a response, mapping
 data) are the cheapest wins.
 
+- **Feature flags in tests:** set them on the mock, e.g. `mockContext.comms.context.value.features = { 'my-flag': true }`.
+- **Tests aren't type-checked** by `pnpm type-check` (it covers `src/` only), so a type error in a test
+  only shows up when that test runs.
+
 ## Rules
 
 - **Mock only at the boundary.** The boundary is the app context: `comms`, `connect`, i18n and colour
