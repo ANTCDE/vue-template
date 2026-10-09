@@ -44,6 +44,22 @@ Consequences, each of which has bitten real apps:
 - Never use `as` to coerce API results. If the types are wrong, fix the types.
 - Use the `connect` from `injectContext()`. Don't build a second client inside the OS.
 
+## Canonical pattern
+
+`src/examples/tables/useNotes.ts`: one `useApi` per verb, check `.error` after `execute`, and
+reset when the context changes.
+
+```ts
+const queryApi = useApi(connect.tables.queryTables<Note>, null)
+const createApi = useApi(connect.records.createRecord, null)
+
+await createApi.execute(tableId, { record: { title } })
+if (createApi.error.value)
+  return // the OS already showed the error
+notifications.success(t('notes.created'))
+await load()
+```
+
 ## `useApi`
 
 ```ts
@@ -200,6 +216,15 @@ const comms = useCommsClient(connect) // still embedded in the OS: calls now go 
 - Calls now leave **your** origin, so the environment's API must allow it by CORS. The allowlist
   holds exact origins (no wildcards), so `https://apps.example.com` and `http://localhost:5174` each
   need their own entry. That is an environment setting: ask the operator to add your origins.
+
+## Don't
+
+- Don't `await connect.x.y()` bare in components. Wrap it in `useApi`.
+- Don't call the ANT API with `fetch`/axios. You have no token, and `connect` has the session.
+- Don't toast API failures. The OS already did.
+- Don't pass `File`, `Blob`, `FormData` or `Date` through `connect`. Use `comms.uploadDmsFiles` for
+  files and ISO strings for dates.
+- Don't use giant page sizes instead of paginating, and don't `as`-cast results.
 
 ## See also
 

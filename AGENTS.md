@@ -150,6 +150,19 @@ export function useThings() {
   `webhookTriggers`, `secrets`, `dms`.
 - Auto-imports cover only `vue`, VueUse and `useDisplay`. Import everything else.
 
+## Known gaps (temporary, read before relying on these areas)
+
+- **TODO: feature flags.** ANT-OS has backend-owned feature flags, but the published SDK doesn't
+  expose them to apps yet (`useFeature`, `context.features`). There is no feature-flags guide until
+  it ships. Don't invent your own flag mechanism (no `VITE_` flags) in the meantime.
+- **`DmsFilePicker` (component library) still uploads from your app's frame.** Under
+  `/developer/<port>` or a self-hosted origin its upload is blocked by storage CORS. Use
+  `comms.uploadDmsFiles` for uploads until the picker is switched over.
+- **SDK versions on this branch.** `package.json` asks for `@antcde/connect-ts` ^0.4.33,
+  `@antcde/vue-utils` ^0.2.28 and `@antcde/component-library` ^0.1.31, which reach npm with the next
+  stable SDK release. Until then, install with the release candidates, as described in
+  [README.md](README.md#installing-before-the-stable-sdk).
+
 ## Verify your work
 
 ```bash

@@ -4,6 +4,15 @@
 > (keep them) and which parts are examples (replace them), and how to run the app inside ANT-OS.
 > **Use when** starting a new app from the template or adding a feature to one.
 
+## Rules
+
+- Keep the platform files as they are: `src/main.ts`, `src/plugins/context.ts` (the name
+  `'appContext'`), `src/plugins/vuetify.ts`, and the `createAnt*` factory configs.
+- Develop inside ANT-OS (`/developer/<port>`), never at the bare dev-server URL.
+- Import explicitly what the factory doesn't auto-import.
+- Add every user-facing string to `en`, `nl` and `de`.
+- Bump `package.json`, `app-config.json` and `CHANGELOG.md` together.
+
 ## File map
 
 ```
@@ -107,6 +116,9 @@ after the first `pnpm dev` or `pnpm build`. They are git-ignored, so run one of 
 
 ## Running inside ANT-OS
 
+Until the SDK release with OS uploads is on npm, install with the release candidates first: see
+[Installing before the stable SDK](../README.md#installing-before-the-stable-sdk).
+
 ```bash
 pnpm install
 pnpm dev            # serves on http://localhost:5174
@@ -175,3 +187,9 @@ instead of failing (see [capabilities/tables.md](capabilities/tables.md)).
 Bump `package.json` `version` **and** `app-config.json` `version` together, and add a
 `CHANGELOG.md` entry with the same version. Users see that entry in the App Store. See
 [publishing.md](publishing.md).
+
+## Don't
+
+- Don't hand-roll Vite, UnoCSS, Vuetify or Vitest configs. Pass overrides to the factories.
+- Don't change the Vite `base` for apps uploaded to the App Store.
+- Don't leave the example tabs, the example table or the example topic in a real app you don't use.

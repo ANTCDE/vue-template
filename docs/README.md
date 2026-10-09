@@ -33,3 +33,7 @@ Start with [concepts.md](concepts.md) if ANT is new to you. AI assistants start 
 - [pitfalls.md](pitfalls.md): symptom → cause → fix
 
 Every capability has a working example in `src/examples/`.
+
+Guides follow one shape: a TL;DR, **Rules**, a **Canonical pattern** that points at the template
+file implementing it, and **Don't**. Three are reference material instead: `concepts.md` (the model),
+`pitfalls.md` (symptom → cause → fix) and `scenarios.md` (illustrative walkthroughs).

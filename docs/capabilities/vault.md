@@ -41,7 +41,7 @@
 - **Redaction.** If a third party echoes the credential back in its response, the server scrubs
   it before the response reaches the browser.
 
-## The flow
+## Canonical pattern: the flow
 
 ```mermaid
 sequenceDiagram

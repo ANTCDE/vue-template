@@ -15,6 +15,31 @@ Then open ANT-OS and go to **`/developer/5174`**. The OS loads your local dev se
 with your real session and context. Outside the OS (`http://localhost:5174` on its own) the
 app has no host to talk to.
 
+## Installing before the stable SDK
+
+> Temporary. Remove this section once `@antcde/connect-ts` 0.4.33 is on npm.
+
+This branch already asks for the SDK release that adds OS uploads (`@antcde/connect-ts` ^0.4.33,
+`@antcde/vue-utils` ^0.2.28, `@antcde/component-library` ^0.1.31). Until that release is published,
+`pnpm install` can't resolve those ranges. Install the release candidates instead by adding this to
+`pnpm-workspace.yaml` **locally**, and don't commit it:
+
+```yaml
+minimumReleaseAgeExclude:
+  - '@antcde/component-library@0.1.31-rc.5'
+  - '@antcde/connect-ts@0.4.33-rc.5'
+  - '@antcde/vue-utils@0.2.28-rc.5'
+
+overrides:
+  '@antcde/component-library': 0.1.31-rc.5
+  '@antcde/connect-ts': 0.4.33-rc.5
+  '@antcde/vue-utils': 0.2.28-rc.5
+```
+
+`npm view @antcde/connect-ts dist-tags` shows the newest `rc`. Keep the three packages on the
+matching rc, because `vue-utils` pins its own `connect-ts`. After changing them, restart the dev
+server with `pnpm dev --force`.
+
 ## What's inside
 
 | Tab (`src/examples/`) | Shows |

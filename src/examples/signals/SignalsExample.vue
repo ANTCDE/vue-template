@@ -25,7 +25,8 @@ const stop = signal.receive((s) => {
 })
 onScopeDispose(() => stop())
 
-// Split screen: open another app next to this one, by id (stable) or title.
+// Split screen: open another app next to this one. A real app should pass `app: { id }` (stable);
+// this demo takes a title only because it can't know the ids of apps installed on your license.
 const splitTitle = ref('')
 function openSplit() {
   if (splitTitle.value.trim())

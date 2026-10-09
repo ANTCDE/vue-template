@@ -17,7 +17,7 @@
    iframe boundary as a message only. → Design for "failed" plus the OS toast; branch on the
    message only when unavoidable.
 4. **An upload or date argument arrives empty or as `{}`.** Arguments are cloned as JSON:
-   `File`, `Blob`, `FormData` and `Date` don't survive. → Presigned upload for files
+   `File`, `Blob`, `FormData` and `Date` don't survive. → `comms.uploadDmsFiles` for files
    ([files-dms.md](capabilities/files-dms.md)); ISO strings for dates.
 5. **Wrong error or loading state after parallel calls.** Several requests share one `useApi`
    instance, for example `Promise.all` over the same instance. → One instance per verb, or a

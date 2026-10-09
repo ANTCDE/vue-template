@@ -45,6 +45,18 @@ engine exactly, so it is not repeated here. Read it there before you write a scr
 - A `TransformWithScriptEvent` trigger counts as a **write** action, because it runs user code
   with real credentials. A trigger marked `read_only` refuses it.
 
+## Canonical pattern
+
+Apps don't run scripts directly. They dispatch a **trigger** whose action is `RunScriptEvent`
+(or `TransformWithScriptEvent`) and read its result. That is the same code as any trigger,
+`src/examples/triggers/useTriggerRunner.ts`:
+
+```ts
+const dispatchApi = useApi(comms.connect.webhookTriggers.dispatch, null, { throwError: true })
+const { dispatch } = useTriggerDispatch(comms)
+const result = await dispatch(() => dispatchApi.execute(scope.type, scope.id, scriptTriggerId, { input }))
+```
+
 ## More operations
 
 | Call | Purpose |

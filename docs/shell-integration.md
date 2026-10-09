@@ -20,6 +20,22 @@
 - Theme from `colorMode.isDark`, never from the raw colour mode (it can be `'auto'`).
 - Don't touch `window.top`, `window.parent` or the top-level URL. Ask the OS through signals.
 
+## Canonical pattern
+
+`src/examples/shell/ShellExample.vue`: read context through `useGlobalStore()`, set the toolbar
+once on mount, and let the OS show messages.
+
+```ts
+const { comms: { toolbar, notifications }, i18n: { t } } = injectContext()
+const { projectId } = useGlobalStore()
+
+onMounted(() => {
+  toolbar.title.value = t('app.title')
+  toolbar.menu.value = [{ icon: 'mdi-refresh', title: t('actions.refresh'), onClick: () => void load() }]
+})
+watch(projectId, () => { reset(); void load() }, { immediate: true })
+```
+
 ## The `comms` object
 
 | Member | Type | Use |
@@ -155,6 +171,14 @@ watch(tab, value => appState.value = value)
 While the OS product tour runs, `context.tourMode` is `true`. To take part in it, use
 `AntTourZone` and `useAppTourMode()` from `@antcde/component-library`. See
 [ui-and-design.md](ui-and-design.md).
+
+## Don't
+
+- Don't fetch the current user, license or project. Read `comms.context`.
+- Don't build your own header bar, snackbar or task detail screen.
+- Don't use `context.task` (deprecated) or the raw colour mode (it can be `'auto'`).
+- Don't change the top-level URL or use the iframe's own URL as shareable state. Use
+  `signal({ route })`.
 
 ## See also
 

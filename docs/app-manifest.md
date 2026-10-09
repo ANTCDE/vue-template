@@ -16,6 +16,19 @@ validate:
 
 The schema is lenient on purpose: unknown keys are allowed and not used. Stick to the keys below.
 
+## Rules
+
+- Keep `version` equal to `package.json` and the newest `CHANGELOG.md` entry.
+- Give tables a distinctive uppercase prefix for your app (`ACME_…`).
+- Treat columns as permanent: activation adds and updates columns but never drops them.
+- Declare the topics you send or receive, and the query parameters you read.
+- Keep the `$schema` line, so editors validate the file.
+
+## Canonical pattern
+
+The template's own `app-config.json`: one project table (`TEMPLATE_NOTES`), one topic
+(`template-note-selected`) and one deep-link parameter (`noteId`). Each is used by an example tab.
+
 ## Top level
 
 | Key | Required | Meaning |
@@ -162,6 +175,12 @@ const comms = useCommsClient(undefined, undefined, JSON.parse(rawManifest))
 
 Keep this. The OS uses it for the running app (its manifest view, the assistant's tools),
 independently of the copy in the App Store.
+
+## Don't
+
+- Don't remove or rename a column and expect the old one to disappear.
+- Don't rely on `is_unique` per project. It is table-wide.
+- Don't add keys the schema doesn't know. They are ignored.
 
 ## See also
 

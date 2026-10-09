@@ -42,14 +42,20 @@ The full implementation is `src/examples/tables/useNotes.ts`. The core:
 const { comms: { connect } } = injectContext()
 const { projectId } = useGlobalStore()
 
+const lookupApi = useApi(connect.tables.getTables, [])
 const queryApi = useApi(connect.tables.queryTables<Note>, null)
 
-if (!projectId.value)
-  return // project tables need a project; show a notice instead
+// 1. Find the table by name. Missing = the app isn't activated in this project (always the case
+//    under /developer/<port>): show that state instead of querying a table that doesn't exist.
+const tables = await lookupApi.execute(projectId.value) // or getLicenseTables(licenseId) for license tables
+const tableId = tables.find(table => table.name === 'MY_NOTES')?.id
+if (!tableId)
+  return showNotActivated()
+
+// 2. Query it by id.
 const result = await queryApi.execute({
   tables: [{
-    name: 'MY_NOTES',             // as declared in app-config.json
-    project: projectId.value,     // or `license: licenseId` for license tables
+    id: tableId,
     as: 'notes',                  // response key
     columns: ['title', 'status'], // or ['*']
     sortBy: 'title',
@@ -60,11 +66,12 @@ const result = await queryApi.execute({
 })
 
 const table = result?.notes        // null when the call failed (useApi does not throw)
-table?.id                          // keep for writes
 table?.permissions['tables.create']
 table?.records                     // Array<Note & TableRecord> | null
 table?.stats.count                 // total rows matching the query
 ```
+
+Keep `tableId` for writes, and drop it when `projectId` changes.
 
 **Filtering.** Write a column as an object with `conditions`:
 

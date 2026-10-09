@@ -38,6 +38,9 @@
   for a folder. The response has `data`, `file` (the current folder), `breadcrumbs` and `meta`, so paginate with
   `per_page` and `page`.
 - Apply the OS label filter only when `context.selectedLabels.resources` includes `'dms_files'`.
+- **`DmsFilePicker` from the component library still uploads from your app's frame**, so its upload is
+  blocked under `/developer/<port>` and on self-hosted origins. Until it is switched to OS uploads, use
+  `comms.uploadDmsFiles` for anything users upload.
 - Upload with `comms.uploadDmsFiles(files, { scope, folderToken, duplicateAction, onProgress })`
   (see [Uploading files](#uploading-files-commsuploaddmsfiles)). If names may clash, call
   `checkDuplicateNames` first and pass the user's choice as `duplicateAction`.

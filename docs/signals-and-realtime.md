@@ -8,6 +8,27 @@
 > Examples: `src/examples/signals/`, `src/examples/tasks/useOpenTasks.ts`,
 > `src/examples/files/useProjectFiles.ts`.
 
+## Rules
+
+- Keep the stop function of every `receive()` / `.with().receive()` and call it in `onScopeDispose`.
+- Subscribe once per **collection** (`userProjectTask`, `projectTask`), never once per row.
+- Re-create subscriptions when the project or license changes. They are bound at subscribe time.
+- Debounce reloads, and make handlers idempotent: one change can arrive several times.
+- After your own write, broadcast it (`signal({ task: { id, action, data } })`) so other apps
+  and the notepad update.
+- Never open your own websocket. The OS holds the only one.
+
+## Canonical pattern
+
+`src/examples/tasks/useOpenTasks.ts`: one collection subscription, a debounced refresh, cleaned up
+with the scope.
+
+```ts
+const refresh = useDebounceFn(load, 300)
+const stop = signal.with('userProjectTask').receive(() => void refresh())
+onScopeDispose(() => stop())
+```
+
 ## Sending
 
 ```ts
@@ -182,6 +203,14 @@ misspelt channel authorises fine and then receives nothing, forever.
 - [ ] One subscription per collection, not per row.
 - [ ] Your own optimistic updates are not undone by the echo of your own change. Ignore
       events for an entity while your save for it is in flight.
+
+## Don't
+
+- Don't forget to unsubscribe. Leaked handlers fire twice, then three times…
+- Don't `.with('task', id)` for every row in a list.
+- Don't subscribe to `licenseProjectTask`. It is deprecated and never fires.
+- Don't expect your own topic messages back. The sender is excluded.
+- Don't trust topic `data` without checking its shape.
 
 ## See also
 
