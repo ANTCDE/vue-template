@@ -5,6 +5,10 @@
 > user sees or what was sent to the platform.
 > **Use when** writing or fixing tests for an ANT app.
 
+**What's expected.** The platform doesn't require feature tests. `tests/app.test.ts` must keep
+passing. Add tests where behaviour is worth guarding: pure helpers (parsing a response, mapping
+data) are the cheapest wins.
+
 ## Rules
 
 - **Mock only at the boundary.** The boundary is the app context: `comms`, `connect`, i18n and colour
@@ -49,8 +53,8 @@ So don't create Vuetify or i18n yourself in a test file.
 
 | Helper | What it does |
 |---|---|
-| `createMockAppContext({ license?, connect?, messages? })` | Builds the full mock and returns `{ comms, i18n, colorMode, emitSignal, sentSignals }`. Every `connect.<service>.<method>` is an auto-stubbed `vi.fn()` that resolves `undefined`, which `useApi` turns into your declared default. Pass `connect` only for the methods whose result a test depends on. Pass `messages` (for example your `en.json`) to get real text. The context has a license; `project` is `null` until you set it. |
-| `emitSignal(signal)` / `sentSignals` | `emitSignal` simulates a signal from the OS to every `signal.receive`. `sentSignals` records everything the app sent. |
+| `createMockAppContext({ license?, connect?, messages? })` | Builds the full mock and returns `{ comms, i18n, colorMode, emitSignal, sentSignals }`. Every `connect.<service>.<method>` is an auto-stubbed `vi.fn()` that resolves `undefined`, which `useApi` turns into your declared default. Pass `connect` only for the methods whose result a test depends on. Pass `messages` (for example your `en.json`) to get real text. The context has a license; `project` and `task` are `null` and there is **no `user`** until you set them (`comms.context.value.user = createMockUser()`). |
+| `emitSignal(signal)` / `sentSignals` | `emitSignal` simulates a signal from the OS to every `signal.receive`. The mock's `signal.with()` doesn't filter: its handler also gets every emitted signal **as is** (the whole signal, not the `cause`), so emit the shape your handler reads. `sentSignals` records everything the app sent. |
 | `testAppSetup(App, ctx, { provideContext })` | Registers five tests: 1. mounts with your real `provideContext`; 2. throws when it is missing; 3. has a `VApp` and survives a dark ↔ light toggle; 4. renders text with i18n; 5. survives flushing every on-mount fetch. |
 | `mountWithContext(component, { mockContext, props?, slots?, user?, context?, pinia?, router?, mountOptions? })` | Mounts with the mock context provided under the `'appContext'` key, so `injectContext()` resolves without any `vi.mock`. Returns `{ wrapper, user, context }`. |
 | `mountApp(component, { props?, slots?, plugins?, stubs?, global? })` | Plain `mount` with transitions stubbed. Use it for components that don't call `injectContext()`. |

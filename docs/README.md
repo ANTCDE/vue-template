@@ -22,6 +22,7 @@ Start with [concepts.md](concepts.md) if ANT is new to you. AI assistants start 
 - [capabilities/scripts.md](capabilities/scripts.md): server-side Python
 - [capabilities/permissions.md](capabilities/permissions.md): roles and permissions
 - [capabilities/labels-sbs.md](capabilities/labels-sbs.md): labels and SBS codes
+- [capabilities/feature-flags.md](capabilities/feature-flags.md): environment feature flags
 - [capabilities/types-and-templates.md](capabilities/types-and-templates.md): custom types and project templates
 
 **Building and shipping**

@@ -169,8 +169,12 @@ Implementing a parameter means two things: read it at startup from
 The template passes the manifest during the handshake:
 
 ```ts
-import rawManifest from '../../app-config.json?raw'
-const comms = useCommsClient(undefined, undefined, JSON.parse(rawManifest))
+// src/manifest.ts
+import rawManifest from '../app-config.json?raw'
+export const manifest: AppManifest = JSON.parse(rawManifest)
+
+// src/plugins/context.ts
+const comms = useCommsClient(undefined, undefined, manifest)
 ```
 
 Keep this. The OS uses it for the running app (its manifest view, the assistant's tools),

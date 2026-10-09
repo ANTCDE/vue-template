@@ -12,7 +12,8 @@
 
 - Keep the stop function of every `receive()` / `.with().receive()` and call it in `onScopeDispose`.
 - Subscribe once per **collection** (`userProjectTask`, `projectTask`), never once per row.
-- Re-create subscriptions when the project or license changes. They are bound at subscribe time.
+- Re-create project- or license-bound subscriptions when that context changes; they are bound at
+  subscribe time. Exception: `userProjectTask` follows the user, not the project, so it stays.
 - Debounce reloads, and make handlers idempotent: one change can arrive several times.
 - After your own write, broadcast it (`signal({ task: { id, action, data } })`) so other apps
   and the notepad update.
@@ -163,8 +164,12 @@ const stop = signal.receive((s) => {
 })
 ```
 
-- **Names** use letters, digits, `-` and `_` (no dots). **Scope** is `project` (default) or
+- **Names** use letters, digits, `-` and `_` (no dots). Prefix them with your app,
+  `<app>-<event>` (`acme-site-selected`), so different apps' topics don't collide. **Scope** is `project` (default) or
   `license`.
+- **A `project` topic needs a selected project.** Without one, the OS has no project channel, so the
+  message only reaches apps in the same browser tab. Apps that work at license level should
+  publish with `scope: 'license'`.
 - **The sender never receives its own message.**
 - **Delivery:** a message goes to the other apps open in the same browser tab, and to other
   tabs and users subscribed to the topic. The OS joins a tab to a topic's cross-tab channel

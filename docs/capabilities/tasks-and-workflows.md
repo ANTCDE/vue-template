@@ -47,7 +47,8 @@
   - `inactive` tasks can't be moved by the user.
 - Open details with `notepad.showTask({ id })`, and workflows with `signal({ openFlow: { taskId } })`.
 - For live updates, use **one** subscription for the user's tasks: `signal.with('userProjectTask')`. Don't open
-  `.with('task', id)` once per visible task.
+  `.with('task', id)` once per visible task. `userProjectTask` is a per-**user** channel covering every
+  project, so it does **not** need re-subscribing when the project changes; just refetch for the new one.
 
 ## Canonical pattern
 
@@ -83,6 +84,20 @@ Filter syntax for `buildTaskQuery`:
 - nested keys such as `type: { key: { $eq: 'inspection' } }`
 - `fields: { tasks: 'id,title,status' }` returns sparse rows
 - `include` names relations, for example `taskProject,assignedTo,labels,type,childrenCount`
+- Filterable columns in `filters`: `project`, `assigned_to`, `title`, `priority`, `status`, `parent`,
+  `sbscode`, `created_by` (plus `is_template`). **My tasks:** `assigned_to: { $eq: userId }`, with
+  `userId` from `useGlobalStore()`.
+- **The task query language** (`q`), the same one the OS task lists use, covers what filters can't.
+  For example `q: 'assignee = currentUser() AND status = open AND due < today() ORDER BY due'`,
+  next to `filters: { project: { $eq: projectId } }`. `tasks.getTaskQueryFields(licenseId)` returns
+  the fields it knows.
+
+**Who may change a task.** Add `canUpdate` to `include`; each row then carries `can_update`. Disable
+edit and close controls where it is `false` (`src/examples/tasks/` does this). Anyone allowed to
+update a task can move it between the statuses described above.
+
+**Lists longer than a page.** Keep `per_page` small and offer "Show more": fetch `page + 1` while
+the response's `links.next` is set, and append. On a live update, reload the pages already shown.
 
 To write typed fields:
 

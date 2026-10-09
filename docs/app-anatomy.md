@@ -50,7 +50,7 @@ AGENTS.md / CLAUDE.md      Entry point for AI coding assistants
 export const [provideContext, injectContext] = useSingleton<Context>(
   'appContext', // the test helpers inject under this name, so don't rename it
   () => {
-    const comms = useCommsClient(undefined, undefined, JSON.parse(rawManifest))
+    const comms = useCommsClient(undefined, undefined, manifest)
     const colorMode = useAntColorMode(comms)
     const i18n = useAntI18n(comms)
     return { comms, colorMode, i18n }
@@ -75,8 +75,10 @@ const { connect, context, signal, notifications, toolbar, notepad } = comms
 
 ## Adding a feature
 
-1. Create `src/examples/<name>/` (or, in a real app, `src/components/<Feature>/` plus
-   `src/composables/`), with a composable for data and a component for UI.
+1. **In this template:** add `src/examples/<name>/` with a composable for data and a component for
+   UI, and register it in `src/examples/index.ts` (that list is what `App.vue` renders as tabs).
+   **In a real app:** replace the tab list in `App.vue` with your own layout or router, and put
+   features in `src/components/<Feature>/` plus `src/composables/`.
 2. Read context from `useGlobalStore()` / `comms.context`. Don't fetch the user, license
    or project.
 3. Call the API with `useApi(connect.<service>.<method>, initial)`. See

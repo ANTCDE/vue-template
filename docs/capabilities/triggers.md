@@ -49,7 +49,9 @@
 - **Permissions.**
   - `triggers.read` lets a user list and run triggers.
   - `triggers.configure` lets a user create and edit them.
-  - Both exist at license and project level. See [permissions.md](permissions.md).
+  - Both exist at license and project level. Check the one at the scope where the trigger lives: a
+    license trigger needs license `triggers.read`, even when the user is in a project. The API
+    enforces it either way. See [permissions.md](permissions.md).
 
 ## Rules
 
@@ -102,6 +104,41 @@ rarely need the first one, because `useTriggerDispatch` already handles that cas
 serves a purchased store resource and is refused (not entitled, subscription expired, …) fails with
 a **non-2xx** response. Inside an iframe app you only receive its message, so show the message and
 don't present it as "no data".
+
+### Finding the trigger to run
+
+Look triggers up by exact name, in the scope where an admin made them:
+
+```ts
+const params = { per_page: 1, filters: { name: { $eq: 'site-weather' }, is_active: { $eq: true } } }
+const inProject = projectId ? (await listApi.execute('projects', projectId, params))?.data[0] : undefined
+const trigger = inProject ?? (await listApi.execute('licenses', licenseId, params))?.data[0]
+// dispatch with the scope it was found in
+```
+
+- A **project's** trigger list contains only that project's triggers, never the license's. If the
+  trigger may live at either level, look in the project first, then the license, and dispatch in the
+  scope where you found it.
+- "Not found" (empty list) and "couldn't check" (the lookup failed, e.g. no `triggers.read`) are
+  different states. Show them differently.
+
+### Reading the result
+
+`dispatch` resolves to whatever the action returns. Two things to expect:
+
+- **External calls may come back wrapped** as `{ response: <the third party's body>, error: null }`.
+  Unwrap when both keys are present:
+  `const body = result && typeof result === 'object' && 'response' in result && 'error' in result ? result.response : result`.
+- **Agree the shape with whoever configures the trigger.** A `TransformWithScriptEvent` (or a script
+  step) can reduce a third-party response to exactly what your app needs, for example
+  `{ temperature: 21.5, unit: 'C' }`. That beats parsing every provider's format in the app.
+
+### Showing failures
+
+The OS already shows a toast when the call fails. Show the outcome **inline** where the user asked
+for it (as `src/examples/triggers/` does), but don't add a second toast. Inside an app frame a refusal
+reaches you as a message only: the SDK types mention `error.response` for refused resource triggers,
+but that is only available to code that calls the API directly, not through the OS.
 
 ## More operations
 

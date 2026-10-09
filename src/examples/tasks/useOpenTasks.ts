@@ -23,7 +23,8 @@ export function useOpenTasks() {
         status: { $eq: 'open' },
         ...(projectId.value ? { project: { $eq: projectId.value } } : {}),
       },
-      include: 'taskProject,assignedTo',
+      // canUpdate: whether this user may change the task, so the UI can disable what would fail.
+      include: 'taskProject,assignedTo,canUpdate',
       per_page: 10,
       page: 1,
     })

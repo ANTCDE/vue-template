@@ -52,8 +52,9 @@ TypeScript, Vuetify 4, UnoCSS, Vite, Vitest, pnpm.
     `aria-autocomplete="none"` on selects and autocompletes. All text goes through `t()`, and
     `en.json`, `nl.json` and `de.json` are updated together.
 12. **Keep the platform files.** `src/main.ts`, `src/plugins/context.ts` (the name `'appContext'`),
-    `src/plugins/vuetify.ts` and the `createAnt*` factory configs stay as they are. Bump
-    `package.json` and `app-config.json` `version` together, with a `CHANGELOG.md` entry.
+    `src/plugins/vuetify.ts` and the `createAnt*` factory configs stay as they are. When you
+    **release** a build to the App Store (not for every change), bump `package.json` and
+    `app-config.json` `version` together and add one `CHANGELOG.md` entry for that version.
 
 ## Where to look: task → doc
 
@@ -73,6 +74,7 @@ TypeScript, Vuetify 4, UnoCSS, Vite, Vitest, pnpm.
 | Use server-side Python scripts | [docs/capabilities/scripts.md](docs/capabilities/scripts.md) |
 | Gate UI on roles and permissions | [docs/capabilities/permissions.md](docs/capabilities/permissions.md) |
 | Use labels, the OS label filter or SBS codes | [docs/capabilities/labels-sbs.md](docs/capabilities/labels-sbs.md) |
+| Hide UI behind an environment feature flag | [docs/capabilities/feature-flags.md](docs/capabilities/feature-flags.md) |
 | Use custom task/project types or project templates | [docs/capabilities/types-and-templates.md](docs/capabilities/types-and-templates.md) |
 | Build UI: tokens, shared components, accessibility | [docs/ui-and-design.md](docs/ui-and-design.md) |
 | Write tests | [docs/testing.md](docs/testing.md) |
@@ -93,7 +95,7 @@ createApp(App).use(i18n).use(vuetify).use(provideContext).mount('#app')
 
 // src/plugins/context.ts
 export const [provideContext, injectContext] = useSingleton<Context>('appContext', () => {
-  const comms = useCommsClient(undefined, undefined, JSON.parse(rawManifest)) // no connect arg: API proxied by the OS
+  const comms = useCommsClient(undefined, undefined, manifest) // no connect arg: API proxied by the OS
   const colorMode = useAntColorMode(comms)
   const i18n = useAntI18n(comms)
   return { comms, colorMode, i18n }
@@ -152,9 +154,9 @@ export function useThings() {
 
 ## Known gaps (temporary, read before relying on these areas)
 
-- **TODO: feature flags.** ANT-OS has backend-owned feature flags, but the published SDK doesn't
-  expose them to apps yet (`useFeature`, `context.features`). There is no feature-flags guide until
-  it ships. Don't invent your own flag mechanism (no `VITE_` flags) in the meantime.
+- **Feature flags need the new SDK release.** `useFeature` and `context.features` arrive with
+  `@antcde/vue-utils` 0.2.28 / `@antcde/connect-ts` 0.4.33 (this branch's versions). See
+  [docs/capabilities/feature-flags.md](docs/capabilities/feature-flags.md).
 - **`DmsFilePicker` (component library) still uploads from your app's frame.** Under
   `/developer/<port>` or a self-hosted origin its upload is blocked by storage CORS. Use
   `comms.uploadDmsFiles` for uploads until the picker is switched over.

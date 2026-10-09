@@ -56,7 +56,7 @@ watch(projectId, () => { reset(); void load() }, { immediate: true })
 
 | Field | Meaning |
 | --- | --- |
-| `user` | The signed-in user (`name`, `email`, `language`, `is_admin`, …) |
+| `user` | The signed-in user (`id`, `name`, `email`, `language`, `is_admin`, …); `useGlobalStore().userId` for the id |
 | `license` | The current license, including the user's license permissions |
 | `project` | The current project or `null`, including the user's project permissions |
 | `projectReadOnly` | `true` when the project is archived. The API refuses writes, so disable them |

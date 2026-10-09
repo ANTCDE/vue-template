@@ -121,6 +121,10 @@ Vuetify component is lighter. Check `pnpm build` output after adding the first i
   with the user's language in ANT-OS.
 - Use named parameters (`t('files.uploaded', { count })`) rather than concatenating strings.
 - Give icon buttons translated labels: `:aria-label="t('notes.delete', { title })"`.
+- **Tone:** German uses the formal "Sie", Dutch the informal "je/jij", English plain second person.
+  Keep platform terms as they appear in ANT-OS (trigger, DMS, SBS) rather than translating them.
+- Messages from the server (errors, trigger results) may arrive in English. Show them as they are,
+  inside your own translated sentence.
 
 ## Don't
 

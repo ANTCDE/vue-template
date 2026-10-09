@@ -6,6 +6,8 @@ copy from or delete.
 
 ## Quick start
 
+Requires Node 22.12+ (or 20.19+) and pnpm 11+.
+
 ```bash
 pnpm install
 pnpm dev
@@ -19,26 +21,30 @@ app has no host to talk to.
 
 > Temporary. Remove this section once `@antcde/connect-ts` 0.4.33 is on npm.
 
-This branch already asks for the SDK release that adds OS uploads (`@antcde/connect-ts` ^0.4.33,
-`@antcde/vue-utils` ^0.2.28, `@antcde/component-library` ^0.1.31). Until that release is published,
-`pnpm install` can't resolve those ranges. Install the release candidates instead by adding this to
-`pnpm-workspace.yaml` **locally**, and don't commit it:
+This branch already asks for the SDK release that adds OS uploads and feature flags
+(`@antcde/connect-ts` ^0.4.33, `@antcde/vue-utils` ^0.2.28, `@antcde/component-library` ^0.1.31).
+Until that release is published, `pnpm install` can't resolve those ranges. Install the newest release
+candidates instead:
 
-```yaml
-minimumReleaseAgeExclude:
-  - '@antcde/component-library@0.1.31-rc.5'
-  - '@antcde/connect-ts@0.4.33-rc.5'
-  - '@antcde/vue-utils@0.2.28-rc.5'
+1. Look up the newest rc: `npm view @antcde/connect-ts dist-tags`. Use the **same rc number** for all
+   three packages, because `vue-utils` pins its own `connect-ts`.
+2. Add this at the **very top** of `pnpm-workspace.yaml`. The linter wants these keys before `allowBuilds`.
 
-overrides:
-  '@antcde/component-library': 0.1.31-rc.5
-  '@antcde/connect-ts': 0.4.33-rc.5
-  '@antcde/vue-utils': 0.2.28-rc.5
-```
+   ```yaml
+   minimumReleaseAgeExclude:
+     - '@antcde/component-library@0.1.31-rc.7'
+     - '@antcde/connect-ts@0.4.33-rc.7'
+     - '@antcde/vue-utils@0.2.28-rc.7'
 
-`npm view @antcde/connect-ts dist-tags` shows the newest `rc`. Keep the three packages on the
-matching rc, because `vue-utils` pins its own `connect-ts`. After changing them, restart the dev
-server with `pnpm dev --force`.
+   overrides:
+     '@antcde/component-library': 0.1.31-rc.7
+     '@antcde/connect-ts': 0.4.33-rc.7
+     '@antcde/vue-utils': 0.2.28-rc.7
+
+   ```
+3. `pnpm install`, then `pnpm dev --force` (`--force` drops a dev server's cached copy of the old SDK).
+4. **Never commit this change.** `pnpm-workspace.yaml` is tracked, so stage around it:
+   `git add -- . ':!pnpm-workspace.yaml'`.
 
 ## What's inside
 

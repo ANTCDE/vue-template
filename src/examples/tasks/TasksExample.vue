@@ -47,7 +47,7 @@ function openFlow(task: Task) {
               icon="mdi-check"
               variant="text"
               size="small"
-              :disabled="projectReadOnly"
+              :disabled="projectReadOnly || task.can_update === false"
               :aria-label="t('examples.tasks.close', { title: task.title })"
               @click.stop="setStatus(task, 'closed')"
             />

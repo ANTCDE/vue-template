@@ -11,6 +11,7 @@ import { injectContext } from '@/plugins/context'
 export const useGlobalStore = createGlobalState(() => {
   const { comms: { context } } = injectContext()
 
+  const userId = computed(() => context.value.user?.id ?? null)
   const licenseId = computed(() => context.value.license?.id ?? null)
   const projectId = computed(() => context.value.project?.id ?? null)
 
@@ -28,5 +29,5 @@ export const useGlobalStore = createGlobalState(() => {
 
   const permissions = usePermissions(context)
 
-  return { licenseId, projectId, projectReadOnly, scope, permissions }
+  return { userId, licenseId, projectId, projectReadOnly, scope, permissions }
 })
