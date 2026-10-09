@@ -1,34 +1,27 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useTheme } from 'vuetify'
+import { computed, ref } from 'vue'
+import { examples } from '@/examples'
 import { injectContext } from '@/plugins/context'
-import Main from '@/components/Main.vue'
 
-// Sync Vuetify theme with ANT-OS color mode preference
+// `isDark` rather than the raw mode: the raw mode can be 'auto', which is not a Vuetify theme.
 const { colorMode } = injectContext()
-const theme = useTheme()
+const theme = computed(() => colorMode.isDark.value ? 'dark' : 'light')
 
-watch(
-  colorMode.isDark,
-  isDark => theme.change(isDark ? 'dark' : 'light'),
-  { immediate: true },
-)
-
-const tab = ref('main')
+const tab = ref(examples[0]?.id)
 </script>
 
 <template>
-  <v-app>
-    <v-app-bar density="compact" color="primary">
-      <v-tabs v-model="tab">
-        <v-tab value="main" :text="$t('app.title')" />
+  <v-app :theme="theme">
+    <v-app-bar density="compact" flat border="b">
+      <v-tabs v-model="tab" color="primary">
+        <v-tab v-for="example in examples" :key="example.id" :value="example.id" :text="$t(example.titleKey)" />
       </v-tabs>
     </v-app-bar>
 
     <v-main class="h-full">
       <v-tabs-window v-model="tab" class="h-full">
-        <v-tabs-window-item value="main" class="h-full overflow-y-auto">
-          <Main />
+        <v-tabs-window-item v-for="example in examples" :key="example.id" :value="example.id" class="h-full overflow-y-auto">
+          <component :is="example.component" />
         </v-tabs-window-item>
       </v-tabs-window>
     </v-main>

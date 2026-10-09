@@ -1,8 +1,43 @@
 {
   "$schema": "node_modules/@antcde/connect-ts/schemas/app-config.schema.json",
   "title": "ANT App Template",
-  "version": "1.0.0",
-  "tagline": "Template for getting started with an ANT OS app.",
-  "tables": [],
-  "signals": {}
+  "version": "2.0.0",
+  "tagline": "Reference app showing how an ANT app uses the platform.",
+  "tables": [
+    {
+      "name": "TEMPLATE_NOTES",
+      "context": "project",
+      "columns": [
+        { "name": "title", "type": "text", "required": true, "hint": "Short title of the note" },
+        { "name": "body", "type": "text-field" },
+        { "name": "status", "type": "dropdown", "options_value": ["open", "done"], "default_value": "open" },
+        { "name": "due", "type": "date" }
+      ]
+    }
+  ],
+  "signals": {
+    "topics": {
+      "template-note-selected": {
+        "scope": "project",
+        "description": "Published when a user picks a note, so other apps can follow along.",
+        "direction": ["send", "receive"],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "message": { "type": "string" }
+          },
+          "required": ["message"]
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "queryParams": {
+      "noteId": {
+        "type": "string",
+        "description": "Id of the note selected in the Tables example.",
+        "access": "readwrite"
+      }
+    }
+  }
 }

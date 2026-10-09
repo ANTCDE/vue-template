@@ -1,10 +1,10 @@
 {
   "name": "ant-app-vue-template",
-  "private": false,
-  "version": "1.0.0",
   "type": "module",
+  "version": "2.0.0",
+  "private": false,
   "scripts": {
-    "dev": "vite --port 5174",
+    "dev": "vite --port 5174 --strictPort",
     "build": "pnpm clear && vite build && pnpm copy && pnpm zip",
     "copy": "pnpm copy-config && pnpm copy-readme && pnpm copy-changelog",
     "copy-config": "pnpm dlx shx cp app-config.json ./dist/app-config.json",
@@ -19,9 +19,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@antcde/component-library": "^0.1.17",
-    "@antcde/connect-ts": "^0.4.19",
-    "@antcde/vue-utils": "^0.2.14",
+    "@antcde/component-library": "^0.1.31",
+    "@antcde/connect-ts": "^0.4.33",
+    "@antcde/vue-utils": "^0.2.28",
     "@vueuse/core": "^15.0.0",
     "@vueuse/math": "^15.0.0",
     "vue": "^3.5.39",
@@ -41,7 +41,7 @@
     "@vue/test-utils": "^2.4.11",
     "eslint": "^10.6.0",
     "happy-dom": "^20.10.6",
-    "typescript": "~7.0.2",
+    "typescript": "~6.0.3",
     "unocss": "^66.7.4",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-icons": "^24.0.0",

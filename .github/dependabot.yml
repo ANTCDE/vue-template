@@ -10,44 +10,44 @@ updates:
   # npm dependencies. Unlike the ant-os monorepo — where version updates are
   # owned by .github/workflows/update-dependencies.yml — this repo has no
   # update workflow, so Dependabot owns them here.
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: npm
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "wednesday"
+      interval: weekly
+      day: wednesday
     # No `target-branch`. `main` is already the default branch, and setting the
     # key would make Dependabot ignore this entry's config for SECURITY updates,
     # killing the grouping below.
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "chore(deps)"
+      prefix: chore(deps)
     labels:
-      - "dependencies"
+      - dependencies
     groups:
       # Minor/patch land grouped, and dependabot-auto-merge.yml merges them.
       minor-and-patch:
         update-types:
-          - "minor"
-          - "patch"
+          - minor
+          - patch
       security-updates:
         applies-to: security-updates
         patterns:
-          - "*"
+          - '*'
     # Majors are deliberately left ungrouped so each one opens its own
     # reviewable PR. They are NOT ignored: a template pinned to a stale major
     # is the problem this file is fixing.
 
   # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-      day: "wednesday"
+      interval: weekly
+      day: wednesday
     commit-message:
-      prefix: "chore(ci)"
+      prefix: chore(ci)
     labels:
-      - "CI/Workflow"
+      - CI/Workflow
     groups:
       actions:
         patterns:
-          - "*"
+          - '*'
