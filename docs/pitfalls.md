@@ -128,32 +128,38 @@
     it yourself, request the URLs right before uploading and send only `config.headers` minus `Host`.
     [files-dms.md](capabilities/files-dms.md#the-direct-presigned-path-still-supported)
 
+40. **A PUT fails with `net::ERR_ACCESS_DENIED` and no CORS message.** The body is a `File` that was
+    picked in another (cross-site) frame and passed over with `postMessage`. Only the picking frame's
+    process may read its disk path. → Send `file.slice(0, file.size, file.type)` instead; the
+    OS upload does this for you.
+    [files-dms.md](capabilities/files-dms.md#the-direct-presigned-path-still-supported)
+
 ## Triggers and Vault
 
-40. **Third-party API keys are stored in a table column, or provider tokens are minted in the
+41. **Third-party API keys are stored in a table column, or provider tokens are minted in the
     browser.** → Store credentials in the Vault, bind them to a trigger, and dispatch the
     trigger. The app never sees the credential. [vault.md](capabilities/vault.md)
-41. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
+42. **A refused dispatch shows as "no data".** The dispatch ran without `throwError`. →
     `useApi(connect.webhookTriggers.dispatch, null, { throwError: true })`.
-42. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
+43. **The consent popup never opens for a per-user OAuth secret.** "Authorization required" is
     a successful (200) result, not an error. → Wrap the dispatch in `useTriggerDispatch(comms)`.
-43. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
+44. **A trigger is called with `fetch(dispatch_url)` from the browser.** → Use
     `connect.webhookTriggers.dispatch`. It goes through the OS session and works with Vault
     bindings and consent.
 
 ## Build, tooling and tests
 
-44. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
+45. **`ref is not defined` (or the same for `useRouter`) after copying code.** Auto-imports
     cover only `vue`, `@vueuse/core`, `@vueuse/math`, `useDisplay` and `src/composables|stores|plugins`. →
     Import everything else explicitly.
-45. **Type-check fails on a fresh clone with unknown globals.** The generated
+46. **Type-check fails on a fresh clone with unknown globals.** The generated
     `auto-imports.d.ts` / `components.d.ts` don't exist yet. → Run `pnpm dev` or `pnpm build`
     once.
-46. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
+47. **The App Store shows the wrong version or changelog.** `package.json`, `app-config.json`
     and `CHANGELOG.md` disagree. → Bump all three together.
-47. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
+48. **Styles or theme are subtly off.** Vite/Uno/Vuetify configs were hand-rolled. → Use the
     `createAnt*` factories; pass overrides instead of replacing them.
-48. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
+49. **A test for an error path passes when it shouldn't.** In tests, the mocked `useApi`
     swallows errors even with `throwError: true`. → Assert on `api.error` / UI state, not on a
     thrown error. [testing.md](testing.md)
 

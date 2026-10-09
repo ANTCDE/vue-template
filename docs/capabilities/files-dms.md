@@ -171,6 +171,10 @@ yourself, these facts apply:
   policy…"* on a request to `*.s3.<region>.amazonaws.com`, and `fetch`/XHR fails without a
   response. `uploadDmsFiles` avoids this entirely.
 - **A `403` from S3** means an expired URL or extra unsigned headers.
+- **Send `file.slice(0, file.size, file.type)`, not a `File` you received from another frame.** A
+  picked file's disk-path read grant stays with the process that picked it. Chrome refuses that
+  `File` as a request body from a cross-site frame (`net::ERR_ACCESS_DENIED`, no response, no CORS
+  message). A slice has no path: same bytes, no copy. `uploadDmsFiles` already does this.
 
 ## Realtime
 
