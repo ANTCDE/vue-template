@@ -79,6 +79,19 @@ declarations compatible, because both apps' activations update the same table.
 Bump the version for every upload, and describe the change in `CHANGELOG.md` the way a user would
 want to read it.
 
+## Supported devices
+
+Each app lists the devices it is built for: **phone**, **tablet** and **desktop/laptop**. Set them
+under **General → Supported devices** in the app's store management. At least one stays on.
+
+- New and existing apps start as tablet and desktop. Phone is opt-in.
+- Switch a device on once the versions on your channels work there. It is a setting on the app, not
+  on a version, so a license still on an older version gets the same label.
+- On a device the app doesn't support, the dashboard marks it ("Not built for phones") and shows a
+  warning before it opens. Users can still open it.
+
+To build for phones, see [shell-integration.md](shell-integration.md#devices-and-the-phone-shell).
+
 ## Externally hosted apps
 
 Instead of uploading a zip, an app can be registered with an **absolute URL** that you host

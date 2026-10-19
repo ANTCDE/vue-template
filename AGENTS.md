@@ -63,6 +63,7 @@ TypeScript, Vuetify 4, UnoCSS, Vite, Vitest, pnpm.
 | Understand ANT, the hierarchy, the app lifecycle | [docs/concepts.md](docs/concepts.md) |
 | Know what each template file does, add a feature, run in the OS | [docs/app-anatomy.md](docs/app-anatomy.md) |
 | Use context, toolbar, notifications, notepad, URL/deep links, theme, i18n | [docs/shell-integration.md](docs/shell-integration.md) |
+| Make the app work on phones (the phone shell, `useHostDevice`) | [docs/shell-integration.md](docs/shell-integration.md#devices-and-the-phone-shell) |
 | Call the API, handle errors and pagination, find the right `connect.*` namespace | [docs/calling-the-api.md](docs/calling-the-api.md) |
 | React to changes live, talk to other apps, ask the OS to do something | [docs/signals-and-realtime.md](docs/signals-and-realtime.md) |
 | Declare tables, topics or deep-link params in `app-config.json` | [docs/app-manifest.md](docs/app-manifest.md) |
@@ -78,7 +79,7 @@ TypeScript, Vuetify 4, UnoCSS, Vite, Vitest, pnpm.
 | Use custom task/project types or project templates | [docs/capabilities/types-and-templates.md](docs/capabilities/types-and-templates.md) |
 | Build UI: tokens, shared components, accessibility | [docs/ui-and-design.md](docs/ui-and-design.md) |
 | Write tests | [docs/testing.md](docs/testing.md) |
-| Build, version and publish; host the app yourself | [docs/publishing.md](docs/publishing.md) |
+| Build, version and publish; declare supported devices; host the app yourself | [docs/publishing.md](docs/publishing.md) |
 | See how capabilities combine in a real-world feature | [docs/scenarios.md](docs/scenarios.md) |
 | Debug odd behaviour / review before shipping | [docs/pitfalls.md](docs/pitfalls.md) |
 

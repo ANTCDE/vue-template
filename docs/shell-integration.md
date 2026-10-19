@@ -67,6 +67,7 @@ watch(projectId, () => { reset(); void load() }, { immediate: true })
 | `selectedLabels` | The OS label filter. See [capabilities/labels-sbs.md](capabilities/labels-sbs.md) |
 | `darkMode` | `true`, `false` or `null` (follow system). Use `colorMode.isDark` instead |
 | `tourMode` | `true` while the OS product tour runs |
+| `device` | The shell's device: `{ class: 'phone' \| 'tablet' \| 'desktop', touch }`. Absent on an older OS. Use `useHostDevice` |
 | `initialRouteQuery` | The OS URL query at the moment your app loaded, for restoring deep links |
 
 The context is a `Ref`. Wrap what you need in `computed`, and `watch` it to react to changes.
@@ -166,6 +167,27 @@ watch(tab, value => appState.value = value)
   `const theme = computed(() => colorMode.isDark.value ? 'dark' : 'light')`.
   UnoCSS `dark:` utilities and the ANT tokens follow automatically.
 
+## Devices and the phone shell
+
+ANT-OS runs on phones, tablets and desktops. On a phone it switches to the phone shell: one app
+at a time, full screen, under the OS top bar. `useHostDevice` from `@antcde/vue-utils` tells you
+where you are:
+
+```ts
+const { comms } = injectContext()
+const { isPhone, isTouch } = useHostDevice(comms.context)
+```
+
+- **Use it for shell decisions:** a phone layout, bigger touch targets, no hover-only controls.
+- **Lay out by your own width, not by the device.** A desktop split pane is as narrow as a phone.
+  Use UnoCSS breakpoints for that.
+- It reads `context.device`. On an OS that doesn't send one yet, it measures your own frame.
+
+Phone support is something you declare. Every app lists the devices it is built for, and on a
+phone an app without phone support is marked "Not built for phones" and opens after a warning.
+Apps are tablet and desktop only until you switch phone on. See
+[publishing.md](publishing.md#supported-devices).
+
 ## Tour mode
 
 While the OS product tour runs, `context.tourMode` is `true`. To take part in it, use
@@ -177,6 +199,7 @@ While the OS product tour runs, `context.tourMode` is `true`. To take part in it
 - Don't fetch the current user, license or project. Read `comms.context`.
 - Don't build your own header bar, snackbar or task detail screen.
 - Don't use `context.task` (deprecated) or the raw colour mode (it can be `'auto'`).
+- Don't size your layout from the device class. Use your own width; the device class is for shell decisions.
 - Don't change the top-level URL or use the iframe's own URL as shareable state. Use
   `signal({ route })`.
 
