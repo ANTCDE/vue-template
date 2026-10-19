@@ -7,7 +7,7 @@ Start with [concepts.md](concepts.md) if ANT is new to you. AI assistants start 
 
 - [concepts.md](concepts.md): the shell, iframe apps, license → project → task, the app lifecycle
 - [app-anatomy.md](app-anatomy.md): the template file by file; running inside ANT-OS
-- [shell-integration.md](shell-integration.md): context, toolbar, notifications, notepad, URL, theme, i18n
+- [shell-integration.md](shell-integration.md): context, toolbar, notifications, notepad, URL, theme, i18n, phones
 - [calling-the-api.md](calling-the-api.md): `connect`, `useApi`, errors, pagination, service map
 - [signals-and-realtime.md](signals-and-realtime.md): asking the OS, live updates, topics, channels
 - [app-manifest.md](app-manifest.md): `app-config.json` reference
@@ -29,7 +29,7 @@ Start with [concepts.md](concepts.md) if ANT is new to you. AI assistants start 
 
 - [ui-and-design.md](ui-and-design.md): tokens, shared components, accessibility
 - [testing.md](testing.md): test helpers and conventions
-- [publishing.md](publishing.md): build, version, publish, self-hosting
+- [publishing.md](publishing.md): build, version, publish, supported devices, self-hosting
 - [scenarios.md](scenarios.md): how capabilities combine (illustrative examples)
 - [pitfalls.md](pitfalls.md): symptom → cause → fix
 
